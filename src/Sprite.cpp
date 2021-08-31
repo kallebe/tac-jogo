@@ -1,70 +1,61 @@
-#include "include/Sprite.hpp"
+#include "../include/Sprite.hpp"
 
-class Sprite {
-  private:
-    SDL_Texture *texture;
-    int width;
-    int height;
-    SDL_Rect clipRect;
+Sprite::Sprite() {
+  texture = nullptr;
+}
+
+Sprite::Sprite(string file) {
+  texture = nullptr;
+  Open(file);
+}
+
+Sprite::~Sprite() {
+  if (texture != nullptr)
+    SDL_DestroyTexture(texture);
+}
+
+void Sprite::Open(string file) {
+  Game &game = Game::GetInstance();
+
+  if (texture != nullptr)
+    SDL_DestroyTexture(texture);
   
-  public:
-    Sprite() {
-      texture = nullptr;
-    }
+  texture = IMG_LoadTexture(game.GetRenderer(), &file[0]);
 
-    Sprite(string file) {
-      texture = nullptr;
-      Open(file);
-    }
+  if (texture == nullptr) {
+    SDL_Log("Erro ao carregar arquivo: %s", SDL_GetError());
+    return;
+  }
 
-    ~Sprite() {
-      if (texture != nullptr)
-        SDL_DestroyTexture(texture);
-    }
+  SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
+}
+void Sprite::SetClip(int x, int y, int w, int h) {
+  clipRect.x = x;
+  clipRect.y = y;
+  clipRect.w = w;
+  clipRect.h = h;
+}
 
-    void Open(string file) {
-      Game &game = Game::GetInstance();
-  
-      if (texture != nullptr)
-        SDL_DestroyTexture(texture);
-      
-      texture = IMG_LoadTexture(game.GetRenderer(), &file[0]);
+void Sprite::Render(int x, int y) {
+  Game &game = Game::GetInstance();
 
-      if (texture == nullptr) {
-        SDL_Log("Erro ao carregar arquivo: %s", SDL_GetError());
-        return;
-      }
+  SDL_Rect destClip;
+  destClip.x = x;
+  destClip.y = y;
+  destClip.w = clipRect.w;
+  destClip.h = clipRect.h;
 
-      SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
-    }
-    void SetClip(int x, int y, int w, int h) {
-      clipRect.x = x;
-      clipRect.y = y;
-      clipRect.w = w;
-      clipRect.h = h;
-    }
+  SDL_RenderCopy(game.GetRenderer(), texture, &clipRect, &destClip);
+}
 
-    void Render(int x, int y) {
-      Game &game = Game::GetInstance();
+int Sprite::GetWidth() {
+  return width;
+}
 
-      SDL_Rect destClip;
-      destClip.x = x;
-      destClip.y = y;
-      destClip.w = clipRect.w;
-      destClip.h = clipRect.h;
-    
-      SDL_RenderCopy(game.GetRenderer(), texture, &clipRect, &destClip);
-    }
+int Sprite::GetHeight() {
+  return height;
+}
 
-    int GetWidth() {
-      return width;
-    }
-
-    int GetHeight() {
-      return height;
-    }
-
-    bool IsOpen() {
-      return texture != nullptr;
-    }
-};
+bool Sprite::IsOpen() {
+  return texture != nullptr;
+}

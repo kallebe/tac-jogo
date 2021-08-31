@@ -1,40 +1,34 @@
-#include "include/Game.hpp"
+#include "../include/Game.hpp"
 
-class State {
-  private:
-    bool quitRequested;
-    Sprite bg;
-    // Music music;
+State::State() {
+  quitRequested = false;
+  bg = Sprite();
+}
 
-  public:
-    State() {
-      quitRequested = false;
-      bg = Sprite();
-    }
+void State::LoadAssets() {
+  bg.Open("../assets/img/ocean.jpg");
+}
 
-    void LoadAssets() {
-      bg.Open("../assets/img/ocean.jpg");
-    }
+void State::Update() {
+  if (SDL_QuitRequested())
+    quitRequested = true;
+}
 
-    void Update() {
-      if (SDL_QuitRequested())
-        quitRequested = true;
-    }
+void State::Render() {
+  bg.Render(0, 0);
+}
 
-    void Render() {
-      bg.Render(0, 0);
-    }
+bool State::QuitRequested() {
+  return quitRequested;
+}
 
-    bool QuitRequested() {
-      return quitRequested;
-    }
+void State::Run() {
+  Game &game = Game::GetInstance();
 
-    void Run(SDL_Renderer *renderer) {
-      while (!quitRequested) {
-        Update();
-        Render();
-        SDL_RenderPresent(renderer);
-        SDL_Delay(33);
-      }
-    }
-};
+  while (!quitRequested) {
+    Update();
+    Render();
+    SDL_RenderPresent(game.GetRenderer());
+    SDL_Delay(33);
+  }
+}

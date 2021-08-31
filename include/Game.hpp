@@ -6,6 +6,7 @@
 #define INCLUDE_SDL
 #include "SDL_include.h"
 #include "State.hpp"
+#include <iostream>
 #include <string>
 
 using namespace std;

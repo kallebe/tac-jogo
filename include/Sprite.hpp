@@ -15,6 +15,7 @@ class Sprite {
   
   public:
     Sprite();
+    Sprite(string file);
     ~Sprite();
     void Open(string file);
     void SetClip(int x, int y, int w, int h);

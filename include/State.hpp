@@ -5,11 +5,12 @@
 
 class State {
   private:
-    bool quitRequested = false;
+    bool quitRequested;
     Sprite bg;
     // Music music;
   public:
     State();
+    void LoadAssets();
     void Update();
     void Render();
     bool QuitRequested();
