@@ -6,7 +6,8 @@ State::State() {
 }
 
 void State::LoadAssets() {
-  bg.Open("../assets/img/ocean.jpg");
+  bg.Open("assets/img/ocean.jpg");
+  bg.SetClip(0, 0, 1024, 600);
 }
 
 void State::Update() {

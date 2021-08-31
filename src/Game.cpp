@@ -58,6 +58,7 @@ SDL_Renderer* Game::GetRenderer() {
 }
 
 void Game::Run() {
+  state->LoadAssets();
   state->Run();
 }
 
