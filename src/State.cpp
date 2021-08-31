@@ -3,6 +3,10 @@
 State::State() {
   quitRequested = false;
   bg = Sprite();
+  music = Music("assets/audio/stageState.ogg");
+
+  if (music.IsOpen())
+    music.Play();
 }
 
 void State::LoadAssets() {

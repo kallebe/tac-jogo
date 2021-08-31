@@ -2,12 +2,14 @@
 #define STATE_HPP
 
 #include "Sprite.hpp"
+#include "Music.hpp"
 
 class State {
   private:
     bool quitRequested;
     Sprite bg;
-    // Music music;
+    Music music;
+
   public:
     State();
     void LoadAssets();

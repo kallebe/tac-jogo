@@ -66,6 +66,6 @@ Game& Game::GetInstance() {
   if (instance != nullptr)
     return *instance;
   
-  instance = new Game("O Jogo", 1024, 600);
+  instance = new Game("Kallebe - 180053485", 1024, 600);
   return *instance;
 }
