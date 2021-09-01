@@ -11,13 +11,13 @@ Game::Game (string title, int width, int height) {
   // Inicializacao do SDL
   if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
     SDL_Log("Erro ao inicializar SDL: %s", SDL_GetError());
-    return;
+    exit(1);
   }
 
   // Inicializacao do SDL IMG
   if (IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG) == 0) {
     SDL_Log("Erro ao inicializar SDL IMG!");
-    return;
+    exit(1);
   }
 
   // Inicializacao do SDL Mixer
@@ -25,7 +25,7 @@ Game::Game (string title, int width, int height) {
 
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) != 0) {
     SDL_Log("Erro ao inicializar SDL Mix!");
-    return;
+    exit(1);
   }
 
   Mix_AllocateChannels(32);

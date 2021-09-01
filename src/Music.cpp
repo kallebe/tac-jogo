@@ -9,7 +9,8 @@ Music::Music(string file) {
 }
 
 void Music::Play(int times) {
-  Mix_PlayMusic(music, times);
+  if (Mix_PlayMusic(music, times) == -1)
+    SDL_Log("Erro ao tocar musica: %s", Mix_GetError());
 }
 
 void Music::Stop(int msToStop) {
