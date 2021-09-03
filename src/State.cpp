@@ -1,9 +1,8 @@
 #include "../include/Game.hpp"
 
-State::State() {
+State::State() : music("assets/audio/stageState.ogg") {
   quitRequested = false;
   bg = Sprite();
-  music = Music("assets/audio/stageState.ogg");
 
   if (music.IsOpen())
     music.Play();
