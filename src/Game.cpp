@@ -21,7 +21,9 @@ Game::Game (string title, int width, int height) {
   }
 
   // Inicializacao do SDL Mixer
-  Mix_Init(MIX_INIT_OGG | MIX_INIT_MP3);
+  if (Mix_Init(MIX_INIT_OGG | MIX_INIT_MP3) != (MIX_INIT_OGG | MIX_INIT_MP3)) {
+    SDL_Log("Erro ao inicializar SDL Mix: %s", Mix_GetError());
+  }
 
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) != 0) {
     SDL_Log("Erro ao inicializar SDL Mix!");
