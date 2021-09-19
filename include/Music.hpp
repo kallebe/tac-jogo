@@ -1,7 +1,9 @@
 #ifndef MUSIC_HPP
 #define MUSIC_HPP
 
-#include "Game.hpp"
+#define INCLUDE_SDL_MIXER
+#define INCLUDE_SDL
+#include "SDL_include.h"
 #include <string>
 
 using namespace std;

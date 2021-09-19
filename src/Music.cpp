@@ -1,4 +1,5 @@
 #include "Music.hpp"
+#include "Game.hpp"
 
 Music::Music() {
   music = nullptr;

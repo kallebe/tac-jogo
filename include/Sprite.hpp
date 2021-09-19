@@ -1,7 +1,10 @@
 #ifndef SPRITE_HPP
 #define SPRITE_HPP
 
-#include "Game.hpp"
+// #include "Game.hpp"
+#define INCLUDE_SDL_IMAGE
+#define INCLUDE_SDL
+#include "SDL_include.h"
 #include <string>
 
 using namespace std;
