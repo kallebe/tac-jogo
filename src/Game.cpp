@@ -1,12 +1,14 @@
-#define INCLUDE_SDL_IMAGE
-#define INCLUDE_SDL_MIXER
 #include "../include/Game.hpp"
+#include <time.h>
 
 Game* Game::instance;
 
 Game::Game (string title, int width, int height) {
   if (instance != nullptr)
     instance = this;
+  
+  // Seed randomico
+  srand(time(NULL));
   
   // Inicializacao do SDL
   if (SDL_Init(SDL_INIT_AUDIO | SDL_INIT_VIDEO | SDL_INIT_TIMER) != 0) {
