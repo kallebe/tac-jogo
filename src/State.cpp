@@ -42,8 +42,6 @@ void State::Update() {
 }
 
 void State::Render() {
-  bg->Render();
-
   for (uint i = 0; i < objectArray.size(); i++)
     objectArray[i]->Render();
 }
@@ -128,7 +126,7 @@ void State::Input() {
 			}
 			// Se não, crie um objeto
 			else {
-				Vec2 objPos = Vec2(200, 0).GetRotated(-PI + PI*(rand() % 1001)/500.0) + Vec2(mouseX, mouseY);
+				Vec2 objPos = Vec2(200, 0).GetRotated(-M_PI + M_PI*(rand() % 1001)/500.0) + Vec2(mouseX, mouseY);
 				AddObject((int) objPos.x, (int) objPos.y);
 			}
 		}

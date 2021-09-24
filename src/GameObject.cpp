@@ -12,12 +12,12 @@ GameObject::~GameObject() {
 }
 
 void GameObject::Update(float dt) {
-  for (uint i = 0; i < components.size(); i++)
+  for (int i = components.size() - 1; i >= 0; i--)
     components[i]->Update(dt);
 }
 
 void GameObject::Render() {
-  for (uint i = 0; i < components.size(); i++)
+  for (int i = components.size() - 1; i >= 0; i--)
     components[i]->Render();
 }
 
@@ -34,13 +34,13 @@ void GameObject::AddComponent(Component *component) {
 }
 
 void GameObject::RemoveComponent(Component *component) {
-  for (uint i = 0; i < components.size(); i++)
+  for (int i = components.size() - 1; i >= 0; i--)
     if (components[i].get() == component)
       components.erase(components.begin() + i);
 }
 
 Component* GameObject::GetComponent(string type) {
-  for (uint i = 0; i < components.size(); i++) {
+  for (int i = components.size() - 1; i >= 0; i--) {
     if (components[i]->Is(type))
       return components[i].get();
   }

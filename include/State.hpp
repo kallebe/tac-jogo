@@ -1,8 +1,6 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
-#define PI 3.14
-
 #include "Sprite.hpp"
 #include "Music.hpp"
 #include <memory>
