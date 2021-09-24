@@ -6,10 +6,14 @@
 State::State() : music("assets/audio/stageState.ogg") {
   quitRequested = false;
 
-  GameObject go = GameObject();
-  bg = new Sprite(go);
-  go.AddComponent(bg);
-  objectArray.emplace_back(&go);
+  GameObject *go = new GameObject();
+	go->box.x = 0;
+	go->box.y = 0;
+
+  bg = new Sprite(*go);
+  go->AddComponent(bg);
+
+  objectArray.emplace_back(go);
 
   if (music.IsOpen())
     music.Play();
@@ -27,20 +31,20 @@ void State::LoadAssets() {
 void State::Update() {
   Input();
 
-  for (int i = 0; i < objectArray.size(); i++) {
+  for (uint i = 0; i < objectArray.size(); i++) {
     objectArray[i]->Update(1);
   }
 
-  for (int i = 0; i < objectArray.size(); i++) {
+  for (uint i = 0; i < objectArray.size(); i++) {
     if (objectArray[i]->IsDead())
       objectArray.erase(objectArray.begin() + i);
   }
 }
 
 void State::Render() {
-  bg->Render(0, 0);
+  bg->Render();
 
-  for (int i = 0; i < objectArray.size(); i++)
+  for (uint i = 0; i < objectArray.size(); i++)
     objectArray[i]->Render();
 }
 
@@ -60,22 +64,21 @@ void State::Run() {
 }
 
 void State::AddObject(int mouseX, int mouseY) {
-  GameObject go = GameObject();
+  GameObject *go = new GameObject();
 
-  Sprite enemy = Sprite(go, "assets/img/penguinface.png");
-  go.AddComponent(&enemy);
-  go.box.x = mouseX + enemy.GetWidth()/2;
-  go.box.y = mouseY + enemy.GetHeight()/2;
-  go.box.w = enemy.GetWidth();
-  go.box.x = enemy.GetHeight();
+  Sprite *enemy = new Sprite(*go, "assets/img/penguinface.png");
+  go->AddComponent(enemy);
 
-  Sound sound = Sound(go, "assets/audio/boom.wav");
-  go.AddComponent(&sound);
+  go->box.x = mouseX + enemy->GetWidth()/2;
+  go->box.y = mouseY + enemy->GetHeight()/2;
 
-  Face face = Face(go);
-  go.AddComponent(&face);
+  Sound *sound = new Sound(*go, "assets/audio/boom.wav");
+  go->AddComponent(sound);
 
-  objectArray.emplace_back(&go);
+  Face *face = new Face(*go);
+  go->AddComponent(face);
+
+  objectArray.emplace_back(go);
 }
 
 void State::Input() {

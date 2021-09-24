@@ -12,8 +12,8 @@ class Face : public Component {
     Face(GameObject& associated);
 
     void Damage(int damage);
-    void Update(float dt);
-    void Render();
+    void Update(float dt) {};
+    void Render() {};
     bool Is(string type);
 };
 

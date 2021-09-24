@@ -14,7 +14,7 @@ class Component {
     Component(GameObject& associated);
     virtual ~Component();
 
-    void virtual Update(float dt);
+    void virtual Update(float dt) = 0;
     void virtual Render() = 0;
     bool virtual Is(string type) = 0;
 };

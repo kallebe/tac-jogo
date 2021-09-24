@@ -17,10 +17,6 @@ void Face::Damage(int damage) {
   }
 }
 
-void Face::Update(float dt) {}
-
-void Face::Render() {}
-
 bool Face::Is(string type) {
   return type == "Face";
 }

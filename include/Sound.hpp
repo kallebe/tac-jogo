@@ -22,7 +22,7 @@ class Sound : public Component {
     void Open(string file);
     bool IsOpen();
 
-    void Update() {};
+    void Update(float dt) {};
     void Render() {};
     bool Is(string type);
 };
