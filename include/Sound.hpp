@@ -21,6 +21,7 @@ class Sound : public Component {
     void Stop();
     void Open(string file);
     bool IsOpen();
+    int GetChannel();
 
     void Update(float dt) {};
     void Render() {};

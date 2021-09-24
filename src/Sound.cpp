@@ -41,6 +41,10 @@ bool Sound::IsOpen() {
   return chunk != nullptr;
 }
 
+int Sound::GetChannel() {
+  return channel;
+}
+
 bool Sound::Is(string type) {
   return type == "Sound";
 }
