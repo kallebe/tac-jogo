@@ -1,12 +1,13 @@
 #include "Face.hpp"
 #include "Sound.hpp"
+#include <iostream>
 
 Face::Face(GameObject& associated) : Component(associated) {
   hitpoints = 30;
 }
 
 void Face::Damage(int damage) {
-  hitpoints--;
+  hitpoints -= damage;
 
   if (hitpoints <= 0) {
     Sound *sound = reinterpret_cast<Sound*>(associated.GetComponent("Sound"));
