@@ -41,11 +41,15 @@ void Sprite::SetClip(int x, int y, int w, int h) {
 }
 
 void Sprite::Render() {
+  Render(associated.box.x,  associated.box.y);
+}
+
+void Sprite::Render(float x, float y) {
   Game &game = Game::GetInstance();
 
   SDL_Rect destClip;
-  destClip.x = associated.box.x;
-  destClip.y = associated.box.y;
+  destClip.x = x;
+  destClip.y = y;
   destClip.w = clipRect.w;
   destClip.h = clipRect.h;
 

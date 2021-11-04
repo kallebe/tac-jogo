@@ -3,8 +3,8 @@
 
 Game* Game::instance;
 
-Game::Game (string title, int width, int height) {
-  if (instance != nullptr)
+Game::Game(string title, int width, int height) {
+  if (instance == nullptr)
     instance = this;
   
   // Seed randomico

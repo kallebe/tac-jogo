@@ -1,11 +1,13 @@
 #include "../include/Game.hpp"
 #include "Face.hpp"
 #include "Sound.hpp"
+#include "TileMap.hpp"
 #include "Vec2.hpp"
 
 State::State() : music("assets/audio/stageState.ogg") {
   quitRequested = false;
 
+	// Background
   GameObject *go = new GameObject();
 	go->box.x = 0;
 	go->box.y = 0;
@@ -14,6 +16,17 @@ State::State() : music("assets/audio/stageState.ogg") {
   go->AddComponent(bg);
 
   objectArray.emplace_back(go);
+
+	// TileMap
+	GameObject *tm = new GameObject();
+	tm->box.x = 0;
+	tm->box.y = 0;
+
+	TileSet *tileset = new TileSet(64, 64, "assets/img/tileset.png");
+	TileMap *tilemap = new TileMap(*tm, "assets/map/tileMap.txt", tileset);
+	tm->AddComponent(tilemap);
+
+	objectArray.emplace_back(tm);
 
   if (music.IsOpen())
     music.Play();
