@@ -12,8 +12,8 @@ TileSet::TileSet(int tileWidth, int tileHeight, string file) {
   tileSet = new Sprite(*go);
   tileSet->Open(file);
   
-  rows    = this->tileSet->GetHeight() / tileHeight;
-  columns = this->tileSet->GetWidth() / tileWidth;
+  rows    = tileSet->GetHeight() / tileHeight;
+  columns = tileSet->GetWidth() / tileWidth;
 }
 
 void TileSet::RenderTile(int index, float x, float y) {
@@ -21,6 +21,12 @@ void TileSet::RenderTile(int index, float x, float y) {
     cout << "Indice do TileSet invalido!\n";
     return;
   }
+  int xpos = (index < columns) ? (index * tileWidth) : ((index % columns) * tileWidth);
+  int ypos = (index / columns) * tileHeight;
+  tileSet->SetClip(xpos, ypos, tileWidth, tileHeight);
+  // cout << "INDEX: " << index << endl;
+  // cout << "XPOS: " << xpos/tileWidth << endl;
+  // cout << "YPOS: " << ypos/tileHeight << endl;
   
   tileSet->Render(x, y);
 }
