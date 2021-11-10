@@ -25,7 +25,7 @@ void TileMap::Load(string file) {
 
     while (!infile.eof()) {
       infile >> number >> comma;
-      tileMatrix.push_back(number);
+      tileMatrix.push_back(number - 1);
     }
     
     infile.close();
@@ -37,7 +37,7 @@ void TileMap::SetTileSet(TileSet *tileSet) {
 }
 
 int& TileMap::At(int x, int y, int z) {
-  int position = x + (mapWidth * y) + (mapHeight * z);
+  int position = x + (mapWidth * y) + (mapWidth * mapHeight * z);
   return tileMatrix[position];
 }
 

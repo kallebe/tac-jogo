@@ -18,15 +18,11 @@ TileSet::TileSet(int tileWidth, int tileHeight, string file) {
 
 void TileSet::RenderTile(int index, float x, float y) {
   if (index < 0 || index > (rows * columns)) {
-    cout << "Indice do TileSet invalido!\n";
     return;
   }
   int xpos = (index < columns) ? (index * tileWidth) : ((index % columns) * tileWidth);
   int ypos = (index / columns) * tileHeight;
   tileSet->SetClip(xpos, ypos, tileWidth, tileHeight);
-  // cout << "INDEX: " << index << endl;
-  // cout << "XPOS: " << xpos/tileWidth << endl;
-  // cout << "YPOS: " << ypos/tileHeight << endl;
   
   tileSet->Render(x, y);
 }
