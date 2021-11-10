@@ -1,5 +1,6 @@
 #include "../include/Sprite.hpp"
 #include "Game.hpp"
+#include "Resources.hpp"
 
 Sprite::Sprite(GameObject& associated) : Component(associated) {
   texture = nullptr;
@@ -9,18 +10,9 @@ Sprite::Sprite(GameObject& associated, string file) : Sprite(associated) {
   Open(file);
 }
 
-Sprite::~Sprite() {
-  if (texture != nullptr)
-    SDL_DestroyTexture(texture);
-}
-
 void Sprite::Open(string file) {
-  Game &game = Game::GetInstance();
-
-  if (texture != nullptr)
-    SDL_DestroyTexture(texture);
-  
-  texture = IMG_LoadTexture(game.GetRenderer(), &file[0]);
+  Resources &res = Resources::GetInstance();
+  texture = res.GetImage(file);
 
   if (texture == nullptr) {
     SDL_Log("Erro ao carregar arquivo: %s", SDL_GetError());

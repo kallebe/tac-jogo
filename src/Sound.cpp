@@ -1,4 +1,5 @@
 #include "Sound.hpp"
+#include "Resources.hpp"
 
 Sound::Sound(GameObject& associated) : Component(associated) {
   chunk = nullptr;
@@ -13,7 +14,6 @@ Sound::~Sound() {
     return;
   
   Stop();
-  Mix_FreeChunk(chunk);
 }
 
 void Sound::Play(int times) {
@@ -31,10 +31,8 @@ void Sound::Stop() {
 }
 
 void Sound::Open(string file) {
-  chunk = Mix_LoadWAV(&file[0]);
-
-  if(!chunk)
-    SDL_Log("Mix_LoadWAV: %s\n", Mix_GetError());
+  Resources &res = Resources::GetInstance();
+  chunk = res.GetSound(file);
 }
 
 bool Sound::IsOpen() {

@@ -1,5 +1,6 @@
 #include "Music.hpp"
 #include "Game.hpp"
+#include "Resources.hpp"
 
 Music::Music() {
   music = nullptr;
@@ -19,10 +20,8 @@ void Music::Stop(int msToStop) {
 }
 
 void Music::Open(string file) {
-  music = Mix_LoadMUS(&file[0]);
-
-  if (music == nullptr)
-    SDL_Log("Erro ao abrir musica: %s", Mix_GetError());
+  Resources &res = Resources::GetInstance();
+  music = res.GetMusic(file);
 }
 
 bool Music::IsOpen() {
@@ -31,5 +30,4 @@ bool Music::IsOpen() {
 
 Music::~Music() {
   Stop();
-  Mix_FreeMusic(music);
 }

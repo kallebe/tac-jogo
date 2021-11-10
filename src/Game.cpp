@@ -1,4 +1,5 @@
 #include "../include/Game.hpp"
+#include "Resources.hpp"
 #include <time.h>
 
 Game* Game::instance;
@@ -64,6 +65,12 @@ SDL_Renderer* Game::GetRenderer() {
 void Game::Run() {
   state->LoadAssets();
   state->Run();
+
+  Resources &res = Resources::GetInstance();
+
+  res.ClearImages();
+  res.ClearMusics();
+  res.ClearSounds();
 }
 
 Game& Game::GetInstance() {
