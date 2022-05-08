@@ -24,7 +24,7 @@ class State {
     bool QuitRequested();
     void Run();
     void AddObject(int mouseX, int mouseY);
-    void Input();
+    // void Input();
 };
 
 #endif
