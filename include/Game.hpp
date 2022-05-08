@@ -13,18 +13,24 @@ using namespace std;
 
 class Game {
   private:
-    static Game *instance;
-    SDL_Window *window;
-    SDL_Renderer *renderer;
-    State *state;
+    static Game   *instance;
+    SDL_Window    *window;
+    SDL_Renderer  *renderer;
+    State         *state;
+
+    int   frameStart;
+    float dt;
 
     Game(string title, int width, int height);
+    void CalulaDeltaTime();
+
   public:
     ~Game();
-    State& GetState();
+    State&        GetState();
     SDL_Renderer *GetRenderer();
-    void Run();
-    static Game &GetInstance();
+    void          Run();
+    static Game  &GetInstance();
+    float         GetDeltaTime();
 };
 
 #endif

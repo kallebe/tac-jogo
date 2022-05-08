@@ -43,6 +43,10 @@ Game::Game(string title, int width, int height) {
 
   // Inicializando state
   state = new State();
+
+  // Inicializando variaveis de temporização
+  frameStart = 0;
+  dt = SDL_GetTicks() * 1000;
 }
 
 Game::~Game() {
@@ -79,4 +83,15 @@ Game& Game::GetInstance() {
   
   instance = new Game("Kallebe - 180053485", 1024, 600);
   return *instance;
+}
+
+void Game::CalulaDeltaTime() {
+  int currentTime = SDL_GetTicks() * 1000;
+
+  dt = currentTime - frameStart;
+  frameStart = currentTime;
+}
+
+float Game::GetDeltaTime() {
+  return dt;
 }

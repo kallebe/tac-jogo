@@ -1,5 +1,4 @@
 #include "InputManager.hpp"
-#include <iostream>
 
 void InputManager::Update() {
   SDL_Event event;

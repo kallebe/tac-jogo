@@ -2,10 +2,12 @@
 #include "Sound.hpp"
 #include "InputManager.hpp"
 #include "Game.hpp"
-#include <iostream>
+#include "Camera.hpp"
 
 Face::Face(GameObject& associated) : Component(associated) {
   hitpoints = 30;
+  pos.x = associated.box.x;
+  pos.y = associated.box.y;
 }
 
 void Face::Damage(int damage) {
@@ -36,4 +38,11 @@ void Face::Update(float dt) {
       Damage(std::rand() % 10 + 10);  // Aplica dano
     }
   }
+}
+
+void Face::Render() {
+  Camera &camera = Camera::GetInstance();
+
+  associated.box.x = pos.x + camera.pos.x;
+  associated.box.y = pos.y + camera.pos.y;
 }

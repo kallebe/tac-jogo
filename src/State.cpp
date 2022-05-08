@@ -4,6 +4,7 @@
 #include "TileMap.hpp"
 #include "Vec2.hpp"
 #include "InputManager.hpp"
+#include "Camera.hpp"
 
 State::State() : music("assets/audio/stageState.ogg") {
   quitRequested = false;
@@ -42,21 +43,28 @@ void State::LoadAssets() {
   bg->SetClip(0, 0, 1024, 600);
 }
 
-void State::Update() {
+void State::Update(float dt) {
   // Input();
 	InputManager &input = InputManager::GetInstance();
+  Camera &camera      = Camera::GetInstance();
+
 	quitRequested = input.KeyPress(ESCAPE_KEY) || input.QuitRequested();
 
+  // Adiciona Face
 	if (input.KeyPress(SPACE_KEY))
 		AddObject(input.GetMouseX(), input.GetMouseY());
+  
+  // Atualiza posição da Camera
+  camera.Update(dt);
 
   for (uint i = 0; i < objectArray.size(); i++) {
-    objectArray[i]->Update(1);
+    objectArray[i]->Update(dt);
   }
 
   for (uint i = 0; i < objectArray.size(); i++) {
-    if (objectArray[i]->IsDead())
+    if (objectArray[i]->IsDead()) {
       objectArray.erase(objectArray.begin() + i);
+    }
   }
 }
 
@@ -74,9 +82,10 @@ void State::Run() {
 	InputManager &input = InputManager::GetInstance();
 
   while (!quitRequested) {
+    float dt = game.GetDeltaTime();
 	  input.Update();
 
-    Update();
+    Update(dt);
     Render();
     SDL_RenderPresent(game.GetRenderer());
     SDL_Delay(33);
@@ -84,13 +93,14 @@ void State::Run() {
 }
 
 void State::AddObject(int mouseX, int mouseY) {
-  GameObject *go = new GameObject();
+  GameObject *go      = new GameObject();
+  Camera     &camera  = Camera::GetInstance();
 
   Sprite *enemy = new Sprite(*go, "assets/img/penguinface.png");
   go->AddComponent(enemy);
 
-  go->box.x = mouseX + enemy->GetWidth()/2;
-  go->box.y = mouseY + enemy->GetHeight()/2;
+  go->box.x = mouseX - camera.pos.x + enemy->GetWidth()/2;
+  go->box.y = mouseY - camera.pos.y + enemy->GetHeight()/2;
 
   Sound *sound = new Sound(*go, "assets/audio/boom.wav");
   go->AddComponent(sound);

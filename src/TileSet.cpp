@@ -1,5 +1,4 @@
 #include "TileSet.hpp"
-#include <iostream>
 
 TileSet::TileSet(int tileWidth, int tileHeight, string file) {
   this->tileWidth  = tileWidth;

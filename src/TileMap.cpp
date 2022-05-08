@@ -1,6 +1,6 @@
 #include "TileMap.hpp"
+#include "Camera.hpp"
 #include <fstream>
-#include <iostream>
 
 TileMap::TileMap(GameObject &associated, string file, TileSet *tileSet) : Component(associated) {
   Load(file);
@@ -50,8 +50,11 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
 }
 
 void TileMap::Render() {
+  Camera &camera = Camera::GetInstance();
+  
   for (int z = 0; z < mapDepth; z++)
-    RenderLayer(z, associated.box.x, associated.box.y);
+    RenderLayer(z, camera.pos.x, camera.pos.y);
+    // RenderLayer(z, associated.box.x, associated.box.y);
 }
 
 int TileMap::GetWidth() {

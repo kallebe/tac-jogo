@@ -19,7 +19,7 @@ class State {
     ~State();
 
     void LoadAssets();
-    void Update();
+    void Update(float dt);
     void Render();
     bool QuitRequested();
     void Run();
