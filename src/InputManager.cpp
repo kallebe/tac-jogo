@@ -1,4 +1,5 @@
 #include "InputManager.hpp"
+#include "Camera.hpp"
 
 void InputManager::Update() {
   SDL_Event event;
@@ -122,11 +123,13 @@ bool InputManager::IsMouseDown(int button) {
 }
 
 int InputManager::GetMouseX() {
-  return mouseX;
+  Camera &camera = Camera::GetInstance();
+  return mouseX - camera.pos.x;
 }
 
 int InputManager::GetMouseY() {
-  return mouseY;
+  Camera &camera = Camera::GetInstance();
+  return mouseY - camera.pos.y;
 }
 
 bool InputManager::QuitRequested() {

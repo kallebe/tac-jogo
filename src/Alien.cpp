@@ -11,8 +11,8 @@ Alien::Alien(GameObject& associated, int nMinions) : Component(associated) {
   hp      = 30;
   speed.x = 0.00004;
   speed.y = 0.00004;
-  // pos.x   = associated.box.x;
-  // pos.y   = associated.box.y;
+  pos.x   = associated.box.GetMiddleX();
+  pos.y   = associated.box.GetMiddleY();
 }
 
 Alien::~Alien() {
@@ -43,27 +43,27 @@ void Alien::Update(float dt) {
       float dx = speed.x * dt;
       float dy = speed.y * dt;
 
-      bool withinLimitsX = abs(associated.box.GetMiddleX() - task.pos.x) < dx;
-      bool withinLimitsY = abs(associated.box.GetMiddleY() - task.pos.y) < dy;
+      bool withinLimitsX = abs(pos.x - task.pos.x) < dx;
+      bool withinLimitsY = abs(pos.y - task.pos.y) < dy;
 
       if (withinLimitsX && withinLimitsY) {
-        associated.box.x = task.pos.x - associated.box.w/2;
-        associated.box.y = task.pos.y - associated.box.h/2;
+        pos.x = task.pos.x;
+        pos.y = task.pos.y;
 
         taskQueue.pop();  // Finaliza tarefa
 
       } else {
-        if (task.pos.x > associated.box.GetMiddleX() && !withinLimitsX)
-          associated.box.x += dx;
+        if (task.pos.x > pos.x && !withinLimitsX)
+          pos.x += dx;
         
-        else if (task.pos.x < associated.box.GetMiddleX() && !withinLimitsX)
-          associated.box.x -= dx;
+        else if (task.pos.x < pos.x && !withinLimitsX)
+          pos.x -= dx;
         
-        if (task.pos.y > associated.box.GetMiddleY() && !withinLimitsY)
-          associated.box.y += dy;
+        if (task.pos.y > pos.y && !withinLimitsY)
+          pos.y += dy;
         
-        else if (task.pos.y < associated.box.GetMiddleY() && !withinLimitsY)
-          associated.box.y -= dy;
+        else if (task.pos.y < pos.y && !withinLimitsY)
+          pos.y -= dy;
       }
     }
 
@@ -78,10 +78,10 @@ void Alien::Update(float dt) {
 }
 
 void Alien::Render() {
-//   Camera &camera = Camera::GetInstance();
+  Camera &camera = Camera::GetInstance();
 
-//   associated.box.x = pos.x + camera.pos.x;
-//   associated.box.y = pos.y + camera.pos.y;
+  associated.box.x = pos.x + camera.pos.x - associated.box.w/2;
+  associated.box.y = pos.y + camera.pos.y - associated.box.h/2;
 }
 
 bool Alien::Is(string type) {
