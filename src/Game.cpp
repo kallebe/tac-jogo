@@ -67,7 +67,7 @@ SDL_Renderer* Game::GetRenderer() {
 }
 
 void Game::Run() {
-  state->LoadAssets();
+  state->Start();
   state->Run();
 
   Resources &res = Resources::GetInstance();

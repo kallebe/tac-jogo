@@ -25,11 +25,12 @@ class Sprite : public Component {
     void SetClip(int x, int y, int w, int h);
     void Render();
     void Render(float x, float y);  
-    int GetWidth();
-    int GetHeight();
+    int  GetWidth();
+    int  GetHeight();
     bool IsOpen();
     
     void Update(float dt) {};
+    void Start() {}
     bool Is(string type);
 };
 

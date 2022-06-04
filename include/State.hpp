@@ -9,10 +9,11 @@ using namespace std;
 
 class State {
   private:
-    bool quitRequested;
+    bool    quitRequested;
+    bool    started;
     Sprite *bg;
-    Music music;
-    vector<unique_ptr<GameObject>> objectArray;
+    Music   music;
+    vector<shared_ptr<GameObject>> objectArray;
 
   public:
     State();
@@ -23,8 +24,10 @@ class State {
     void Render();
     bool QuitRequested();
     void Run();
-    void AddObject(int mouseX, int mouseY);
-    // void Input();
+    // void AddObject(int mouseX, int mouseY);
+    void Start();
+    weak_ptr<GameObject> AddObject(GameObject *go);
+    weak_ptr<GameObject> GetObjectPtr(GameObject *go);
 };
 
 #endif

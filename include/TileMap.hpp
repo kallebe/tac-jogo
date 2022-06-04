@@ -25,10 +25,11 @@ class TileMap : public Component {
     int& At(int x, int y, int z = 0);
     void Render();
     void RenderLayer(int layer, int cameraX = 0, int cameraY = 0);
-    int GetWidth();
-    int GetHeight();
-    int GetDepth();
+    int  GetWidth();
+    int  GetHeight();
+    int  GetDepth();
     void Update(float dt) {}
+    void Start() {}
     bool Is(string type);
 };
 

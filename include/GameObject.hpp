@@ -21,6 +21,7 @@ class GameObject {
   
   public:
     Rect box;
+    bool started;
 
     GameObject();
     ~GameObject();
@@ -31,6 +32,7 @@ class GameObject {
     void RequestDelete();
     void AddComponent(Component *component);
     void RemoveComponent(Component *component);
+    void Start();
     Component* GetComponent(string type);
 };
 

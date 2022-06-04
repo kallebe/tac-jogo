@@ -3,6 +3,7 @@
 
 GameObject::GameObject() {
   isDead = false;
+  started = false;
 }
 
 GameObject::~GameObject() {
@@ -14,6 +15,15 @@ GameObject::~GameObject() {
 void GameObject::Update(float dt) {
   for (int i = components.size() - 1; i >= 0; i--)
     components[i]->Update(dt);
+}
+
+void GameObject::Start() {
+  for (uint i = 0; i < components.size(); i++)
+    components[i]->Start();
+  
+  started = true;
+
+
 }
 
 void GameObject::Render() {
@@ -31,6 +41,9 @@ void GameObject::RequestDelete() {
 
 void GameObject::AddComponent(Component *component) {
   components.emplace_back(component);
+
+  if (started)
+    component->Start();
 }
 
 void GameObject::RemoveComponent(Component *component) {

@@ -20,3 +20,11 @@ bool Rect::Contains(float x, float y) {
   
   return xInRange && yInRange;
 }
+
+float Rect::GetMiddleX() {
+  return x + w/2;
+}
+
+float Rect::GetMiddleY() {
+  return y + h/2;
+}

@@ -8,6 +8,8 @@ class Rect {
     Rect();
     Rect(float x, float y, float w, float h);
     
+    float GetMiddleX();
+    float GetMiddleY();
     bool Contains(float x, float y);
 };
 
