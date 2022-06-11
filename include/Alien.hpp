@@ -12,13 +12,14 @@ class Alien : public Component {
     Vec2  speed;
     Vec2  pos;
     int   hp;
+    int   nMinions;
     class Action;
 
     vector<weak_ptr<GameObject>> minionArray;
     queue<Action> taskQueue;
   
   public:
-    Alien(GameObject& associated, int nMinions);
+    Alien(GameObject& associated, int numMinions);
     ~Alien();
 
     void Update(float dt);

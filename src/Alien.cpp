@@ -1,18 +1,21 @@
 #include "Alien.hpp"
+#include "Minion.hpp"
 #include "Camera.hpp"
 #include "Sprite.hpp"
+#include "Game.hpp"
 #include "InputManager.hpp"
 #include <iostream>
 
-Alien::Alien(GameObject& associated, int nMinions) : Component(associated) {
+Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
   Sprite *sp = new Sprite(associated, "assets/img/alien.png");
   associated.AddComponent(sp);
 
-  hp      = 30;
-  speed.x = 0.00004;
-  speed.y = 0.00004;
-  pos.x   = associated.box.GetMiddleX();
-  pos.y   = associated.box.GetMiddleY();
+  hp       = 30;
+  nMinions = numMinions;
+  speed.x  = 0.00004;
+  speed.y  = 0.00004;
+  pos.x    = associated.box.GetMiddleX();
+  pos.y    = associated.box.GetMiddleY();
 }
 
 Alien::~Alien() {
@@ -20,7 +23,23 @@ Alien::~Alien() {
 }
 
 void Alien::Start() {
+  Game &game = Game::GetInstance();
+  weak_ptr<GameObject> alienCenter = game.GetState().GetObjectPtr(&associated);
 
+  if (!alienCenter.lock()) {
+    return;
+  }
+
+  float darc = 360 / nMinions;
+
+  for (int i = 0; i < nMinions; i++) {
+    GameObject *minionGo = new GameObject();
+
+    Minion *minion = new Minion(*minionGo, alienCenter, i * darc);
+    minionGo->AddComponent(minion);
+
+    minionArray.push_back(game.GetState().AddObject(minionGo));
+  }
 }
 
 void Alien::Update(float dt) {

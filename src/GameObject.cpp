@@ -22,8 +22,6 @@ void GameObject::Start() {
     components[i]->Start();
   
   started = true;
-
-
 }
 
 void GameObject::Render() {
