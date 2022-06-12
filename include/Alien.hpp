@@ -32,7 +32,8 @@ class Alien::Action {
   public:
     enum ActionType { MOVE, SHOOT };
 
-    Vec2 pos;
+    Vec2  pos;
+    float angle;
     ActionType type;
 
     Action(ActionType type, float x, float y);

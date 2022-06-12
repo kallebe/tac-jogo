@@ -4,6 +4,7 @@
 #include "Sprite.hpp"
 #include "Game.hpp"
 #include "InputManager.hpp"
+#include <math.h>
 #include <iostream>
 
 Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
@@ -12,8 +13,8 @@ Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
 
   hp       = 30;
   nMinions = numMinions;
-  speed.x  = 0.00004;
-  speed.y  = 0.00004;
+  speed.x  = 6;
+  speed.y  = 6;
   pos.x    = associated.box.GetMiddleX();
   pos.y    = associated.box.GetMiddleY();
 }
@@ -59,30 +60,22 @@ void Alien::Update(float dt) {
     Action task = taskQueue.front();
 
     if (task.type == Action::ActionType::MOVE) {
-      float dx = speed.x * dt;
-      float dy = speed.y * dt;
+      float angle = atan2(task.pos.y-pos.y, task.pos.x-pos.x);
+      float dx = speed.x * cos(angle);
+      float dy = speed.y * sin(angle);
 
       bool withinLimitsX = abs(pos.x - task.pos.x) < dx;
       bool withinLimitsY = abs(pos.y - task.pos.y) < dy;
 
-      if (withinLimitsX && withinLimitsY) {
+      if (withinLimitsX || withinLimitsY) {
         pos.x = task.pos.x;
         pos.y = task.pos.y;
 
         taskQueue.pop();  // Finaliza tarefa
 
       } else {
-        if (task.pos.x > pos.x && !withinLimitsX)
-          pos.x += dx;
-        
-        else if (task.pos.x < pos.x && !withinLimitsX)
-          pos.x -= dx;
-        
-        if (task.pos.y > pos.y && !withinLimitsY)
-          pos.y += dy;
-        
-        else if (task.pos.y < pos.y && !withinLimitsY)
-          pos.y -= dy;
+        pos.x += dx;
+        pos.y += dy;
       }
     }
 
