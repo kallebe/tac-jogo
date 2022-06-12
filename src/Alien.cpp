@@ -13,8 +13,8 @@ Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
 
   hp       = 30;
   nMinions = numMinions;
-  speed.x  = 6;
-  speed.y  = 6;
+  speed.x  = 0.00004;
+  speed.y  = 0.00004;
   pos.x    = associated.box.GetMiddleX();
   pos.y    = associated.box.GetMiddleY();
 }
@@ -61,8 +61,8 @@ void Alien::Update(float dt) {
 
     if (task.type == Action::ActionType::MOVE) {
       float angle = atan2(task.pos.y-pos.y, task.pos.x-pos.x);
-      float dx = speed.x * cos(angle);
-      float dy = speed.y * sin(angle);
+      float dx = speed.x * cos(angle) * dt;
+      float dy = speed.y * sin(angle) * dt;
 
       bool withinLimitsX = abs(pos.x - task.pos.x) < dx;
       bool withinLimitsY = abs(pos.y - task.pos.y) < dy;
