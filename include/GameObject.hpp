@@ -22,6 +22,7 @@ class GameObject {
   public:
     Rect box;
     bool started;
+    double angleDeg;
 
     GameObject();
     ~GameObject();

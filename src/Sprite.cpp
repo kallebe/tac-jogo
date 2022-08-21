@@ -4,9 +4,14 @@
 
 Sprite::Sprite(GameObject& associated) : Component(associated) {
   texture = nullptr;
+  scale.x = 1;
+  scale.y = 1;
 }
 
 Sprite::Sprite(GameObject& associated, string file) : Sprite(associated) {
+  scale.x = 1;
+  scale.y = 1;
+
   Open(file);
 }
 
@@ -42,18 +47,27 @@ void Sprite::Render(float x, float y) {
   SDL_Rect destClip;
   destClip.x = x;
   destClip.y = y;
-  destClip.w = clipRect.w;
-  destClip.h = clipRect.h;
+  destClip.w = clipRect.w * this->scale.x;
+  destClip.h = clipRect.h * this->scale.y;
 
-  SDL_RenderCopy(game.GetRenderer(), texture, &clipRect, &destClip);
+  SDL_RenderCopyEx(game.GetRenderer(), texture, &clipRect, &destClip, associated.angleDeg, nullptr, SDL_FLIP_NONE);
 }
 
 int Sprite::GetWidth() {
-  return width;
+  return width * scale.x;
 }
 
 int Sprite::GetHeight() {
-  return height;
+  return height * scale.y;
+}
+
+Vec2 Sprite::GetScale() {
+  return this->scale;
+}
+
+void Sprite::SetScale(float scaleX, float scaleY) {
+  this->scale.x = scaleX;
+  this->scale.y = scaleY;
 }
 
 bool Sprite::IsOpen() {

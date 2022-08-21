@@ -5,7 +5,7 @@
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL
 #include "SDL_include.h"
-#include <string.h>
+#include <string>
 #include <unordered_map>
 
 using namespace std;

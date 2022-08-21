@@ -80,9 +80,15 @@ void Alien::Update(float dt) {
     }
 
     if (task.type == Action::ActionType::SHOOT) {
+      Minion *minion = (Minion *) minionArray[rand() % minionArray.size()].lock().get()->GetComponent("Minion");
+      
+      minion->Shoot(task.pos);
       taskQueue.pop();
     }
   }
+
+  // Girar lentamente
+  associated.angleDeg -= DESLOCAMENTO_ARCO / 4;
 
   // Remover Alien por dano
   if (hp <= 0)

@@ -5,6 +5,7 @@
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL
 #include "SDL_include.h"
+#include "Vec2.hpp"
 #include "Component.hpp"
 #include <string>
 
@@ -15,6 +16,7 @@ class Sprite : public Component {
     SDL_Texture *texture;
     int width;
     int height;
+    Vec2 scale;
     SDL_Rect clipRect;
   
   public:
@@ -28,6 +30,8 @@ class Sprite : public Component {
     int  GetWidth();
     int  GetHeight();
     bool IsOpen();
+    void SetScale(float scaleX, float scaleY);
+    Vec2 GetScale();
     
     void Update(float dt) {};
     void Start() {}
