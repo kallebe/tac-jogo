@@ -6,11 +6,21 @@ Sprite::Sprite(GameObject& associated) : Component(associated) {
   texture = nullptr;
   scale.x = 1;
   scale.y = 1;
+
+  this->frameCount = 1;
+  this->frameTime  = 1;
+  this->currentFrame  = 0;
+  this->timeElapsed   = 0;
 }
 
-Sprite::Sprite(GameObject& associated, string file) : Sprite(associated) {
+Sprite::Sprite(GameObject& associated, string file, int frameCount, float frameTime) : Sprite(associated) {
   scale.x = 1;
   scale.y = 1;
+
+  this->frameCount    = frameCount;
+  this->frameTime     = frameTime;
+  this->currentFrame  = 0;
+  this->timeElapsed   = 0;
 
   Open(file);
 }
@@ -25,9 +35,44 @@ void Sprite::Open(string file) {
   }
 
   SDL_QueryTexture(texture, nullptr, nullptr, &width, &height);
-  SetClip(0, 0, width, height);
+  SetClip(0, 0, width/frameCount, height);
   associated.box.w = width;
   associated.box.h = height;
+}
+
+void Sprite::Update(float dt) {
+  if (frameCount == 1)
+    return;
+  
+  timeElapsed += dt;
+
+  // Avança o frame e seta o clipe
+  if (timeElapsed > frameTime) {
+    timeElapsed = 0;
+    currentFrame++;
+
+    if (currentFrame >= frameCount)
+      currentFrame = 0;
+
+    int frameWidth = width / frameCount;
+    SetClip(frameWidth * currentFrame, 0, frameWidth, height);
+  }
+}
+
+void Sprite::SetFrame(int frame) {
+  this->currentFrame = frame;
+
+  int frameWidth = width / frameCount;
+  SetClip(frameWidth * currentFrame, 0, frameWidth, height);
+}
+
+void Sprite::SetFrameCount(int frameCount) {
+  this->frameCount = frameCount;
+  // TODO: resetar frameInicial e recalcular box do GameObject
+}
+
+void Sprite::SetFrameTime(float frameTime) {
+  this->frameTime = frameTime;
 }
 
 void Sprite::SetClip(int x, int y, int w, int h) {
@@ -54,7 +99,7 @@ void Sprite::Render(float x, float y) {
 }
 
 int Sprite::GetWidth() {
-  return width * scale.x;
+  return width * scale.x / frameCount;
 }
 
 int Sprite::GetHeight() {

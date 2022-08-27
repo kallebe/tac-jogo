@@ -3,8 +3,8 @@
 #include <math.h>
 #include <iostream>
 
-Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, string sprite) : Component(associated) {
-  Sprite *sp = new Sprite(associated, sprite);
+Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, string sprite, int frameCount, float frameTime) : Component(associated) {
+  Sprite *sp = new Sprite(associated, sprite, frameCount, frameTime);
   associated.AddComponent(sp);
 
   associated.angleDeg = angle * 180 / M_PI;

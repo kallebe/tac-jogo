@@ -18,10 +18,14 @@ class Sprite : public Component {
     int height;
     Vec2 scale;
     SDL_Rect clipRect;
+    int frameCount;
+    int currentFrame;
+    float timeElapsed;
+    float frameTime;
   
   public:
     Sprite(GameObject& associated);
-    Sprite(GameObject& associated, string file);
+    Sprite(GameObject& associated, string file, int frameCount = 1, float frameTime = 1);
     
     void Open(string file);
     void SetClip(int x, int y, int w, int h);
@@ -33,8 +37,13 @@ class Sprite : public Component {
     void SetScale(float scaleX, float scaleY);
     Vec2 GetScale();
     
-    void Update(float dt) {};
+    void Update(float dt);
     void Start() {}
+
+    void SetFrame(int frame);
+    void SetFrameCount(int frameCount);
+    void SetFrameTime(float frameTime);
+
     bool Is(string type);
 };
 

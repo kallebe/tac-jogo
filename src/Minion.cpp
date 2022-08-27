@@ -59,7 +59,7 @@ void Minion::Shoot(Vec2 target) {
   bulletGo->box.x = this->associated.box.GetMiddleX();
   bulletGo->box.y = this->associated.box.GetMiddleY();
 
-  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet1.png");
+  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet2.png", 3, 2000000.0);
   bulletGo->AddComponent(bullet);
 
   game.GetState().AddObject(bulletGo);
