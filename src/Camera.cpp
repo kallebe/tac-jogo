@@ -13,16 +13,16 @@ void Camera::Update(float dt) {
   // Sem foco
   InputManager &input = InputManager::GetInstance();
 
-  if (input.KeyPress(LEFT_ARROW_KEY))
+  if (input.IsKeyDown(LEFT_ARROW_KEY))
     pos.x += speed.x * dt;
 
-  else if (input.KeyPress(RIGHT_ARROW_KEY))
+  else if (input.IsKeyDown(RIGHT_ARROW_KEY))
     pos.x -= speed.x * dt;
 
-  else if (input.KeyPress(UP_ARROW_KEY))
+  else if (input.IsKeyDown(UP_ARROW_KEY))
     pos.y += speed.y * dt;
 
-  else if (input.KeyPress(DOWN_ARROW_KEY))
+  else if (input.IsKeyDown(DOWN_ARROW_KEY))
     pos.y -= speed.y * dt;
 }
 

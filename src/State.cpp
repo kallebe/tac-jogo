@@ -7,6 +7,7 @@
 #include "Camera.hpp"
 #include "CameraFollower.hpp"
 #include "Alien.hpp"
+#include "PenguinBody.hpp"
 
 State::State() : music("assets/audio/stageState.ogg") {
   quitRequested = false;
@@ -45,6 +46,16 @@ State::State() : music("assets/audio/stageState.ogg") {
   alienObj->AddComponent(alien);
 
   objectArray.emplace_back(alienObj);
+
+  // Penguin
+  GameObject *penguinObj = new GameObject();
+  penguinObj->box.x = 704;
+  penguinObj->box.y = 640;
+
+  PenguinBody *pbody = new PenguinBody(*penguinObj);
+  penguinObj->AddComponent(pbody);
+
+  objectArray.emplace_back(penguinObj);
 
   if (music.IsOpen())
     music.Play();
