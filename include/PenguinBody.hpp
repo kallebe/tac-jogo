@@ -6,7 +6,9 @@
 
 #define PENGUIN_ACCELERATION  0.00001
 #define MAX_PENGUIN_SPEED     0.0004
-#define PENGUIN_ANGULAR_SPEED 0.00004  
+#define PENGUIN_ANGULAR_SPEED 0.00004
+
+#define PENGUIN_HP 100
 
 using namespace std;
 
@@ -29,6 +31,7 @@ class PenguinBody : public Component {
     void Update(float dt);
     void Render();
     bool Is(string type);
+    void NotifyCollision(GameObject &other);
 };
 
 #endif

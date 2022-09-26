@@ -1,6 +1,8 @@
 #include "Alien.hpp"
+#include "Bullet.hpp"
 #include "Minion.hpp"
 #include "Camera.hpp"
+#include "Collider.hpp"
 #include "Sprite.hpp"
 #include "Game.hpp"
 #include "InputManager.hpp"
@@ -8,10 +10,15 @@
 #include <iostream>
 
 Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
+  // Sprite
   Sprite *sp = new Sprite(associated, "assets/img/alien.png");
   associated.AddComponent(sp);
 
-  hp       = 30;
+  // Collider
+  Collider *col = new Collider(associated);
+  associated.AddComponent(col);
+
+  hp       = ALIEN_HP;
   nMinions = numMinions;
   speed.x  = 0.00004;
   speed.y  = 0.00004;
@@ -46,7 +53,7 @@ void Alien::Start() {
 void Alien::Update(float dt) {
   InputManager &input = InputManager::GetInstance();
   // Verificando novas ações
-  if (input.MousePress(LEFT_MOUSE_BUTTON)) {
+  if (input.MousePress(LEFT_MOUSE_BUTTON) && minionArray.size()) {
     Action shoot = Action(Action::ActionType::SHOOT, input.GetMouseX(), input.GetMouseY());
     taskQueue.push(shoot);
 
@@ -104,6 +111,19 @@ void Alien::Render() {
 
 bool Alien::Is(string type) {
   return type == "Alien";
+}
+
+void Alien::NotifyCollision(GameObject &other) {
+  if (other.GetComponent("Bullet") != nullptr) {
+    Bullet *bullet = (Bullet*) other.GetComponent("Bullet");
+    hp -= bullet->GetDamage();
+  }
+}
+
+void Alien::RemoveMinion(weak_ptr<GameObject> minion) {
+  for (int i = minionArray.size() - 1; i >= 0; i--)
+    if (minionArray[i].lock() == minion.lock())
+      minionArray.erase(minionArray.begin() + i);
 }
 
 Alien::Action::Action::Action(ActionType type, float x, float y) {

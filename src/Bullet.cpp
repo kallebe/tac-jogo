@@ -1,13 +1,19 @@
 #include "Bullet.hpp"
+#include "Collider.hpp"
 #include "Sprite.hpp"
 #include <math.h>
 #include <iostream>
 
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, string sprite, int frameCount, float frameTime) : Component(associated) {
+  // Sprite
   Sprite *sp = new Sprite(associated, sprite, frameCount, frameTime);
   associated.AddComponent(sp);
 
   associated.angleDeg = angle * 180 / M_PI;
+
+  // Collider
+  Collider *col = new Collider(associated);
+  associated.AddComponent(col);
 
   this->speed.x = speed * cos(angle);
   this->speed.y = speed * sin(angle);
@@ -35,3 +41,8 @@ int Bullet::GetDamage() {
   return damage;
 }
 
+void Bullet::NotifyCollision(GameObject &other) {
+  if (other.GetComponent("Bullet") == nullptr) {
+    associated.RequestDelete();
+  }
+}

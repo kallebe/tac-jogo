@@ -24,6 +24,7 @@ class Bullet : public Component {
     void Start() {};
     bool Is(string type);
     int  GetDamage();
+    void NotifyCollision(GameObject &other);
 };
 
 #endif

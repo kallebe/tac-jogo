@@ -81,7 +81,7 @@ Game& Game::GetInstance() {
   if (instance != nullptr)
     return *instance;
   
-  instance = new Game("Kallebe - 180053485", 1024, 600);
+  instance = new Game("Kallebe - 180053485", SCREEN_WIDTH, SCREEN_HEIGHT);
   return *instance;
 }
 

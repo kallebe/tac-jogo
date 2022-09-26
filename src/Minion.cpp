@@ -1,11 +1,14 @@
 #include "Minion.hpp"
+#include "Alien.hpp"
 #include "Bullet.hpp"
 #include "Game.hpp"
 #include "Camera.hpp"
 #include "Sprite.hpp"
+#include "Collider.hpp"
 #include <math.h>
 
 Minion::Minion(GameObject &associated, weak_ptr<GameObject> alienCenter, float arcOffsetDeg) : Component(associated) {
+  // Sprite
   Sprite *sp = new Sprite(associated, "assets/img/minion.png");
   
   float scale = 1.0 + (rand() % 6)/10.0;
@@ -13,6 +16,10 @@ Minion::Minion(GameObject &associated, weak_ptr<GameObject> alienCenter, float a
 
   associated.angleDeg = arcOffsetDeg;
   associated.AddComponent(sp);
+
+  // Collider
+  Collider *col = new Collider(associated);
+  associated.AddComponent(col);
 
   this->alienCenter = alienCenter;
   this->arc         = arcOffsetDeg;
@@ -63,4 +70,15 @@ void Minion::Shoot(Vec2 target) {
   bulletGo->AddComponent(bullet);
 
   game.GetState().AddObject(bulletGo);
+}
+
+void Minion::NotifyCollision(GameObject &other) {
+  if (other.GetComponent("Bullet") != nullptr) {
+    Game &game = Game::GetInstance();
+    Alien *alien = (Alien*) alienCenter.lock()->GetComponent("Alien");
+
+    alien->RemoveMinion(game.GetState().GetObjectPtr(&associated));
+
+    associated.RequestDelete();
+  }
 }

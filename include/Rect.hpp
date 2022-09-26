@@ -10,6 +10,7 @@ class Rect {
     
     float GetMiddleX();
     float GetMiddleY();
+    Rect  GetCenter();
     bool Contains(float x, float y);
 };
 

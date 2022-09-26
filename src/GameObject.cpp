@@ -51,6 +51,11 @@ void GameObject::RemoveComponent(Component *component) {
       components.erase(components.begin() + i);
 }
 
+void GameObject::NotifyCollision(GameObject &other) {
+  for (int i = components.size() - 1; i >= 0; i--)
+    components[i]->NotifyCollision(other);
+}
+
 Component* GameObject::GetComponent(string type) {
   for (int i = components.size() - 1; i >= 0; i--) {
     if (components[i]->Is(type))

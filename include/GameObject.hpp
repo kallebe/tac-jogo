@@ -34,6 +34,7 @@ class GameObject {
     void AddComponent(Component *component);
     void RemoveComponent(Component *component);
     void Start();
+    void NotifyCollision(GameObject &other);
     Component* GetComponent(string type);
 };
 

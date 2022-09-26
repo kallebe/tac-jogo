@@ -9,6 +9,9 @@
 #include <iostream>
 #include <string>
 
+#define SCREEN_WIDTH  1024
+#define SCREEN_HEIGHT 600
+
 using namespace std;
 
 class Game {

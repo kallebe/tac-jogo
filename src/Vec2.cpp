@@ -25,19 +25,21 @@ float Vec2::Size() {
 }
 
 Vec2 Vec2::operator+(Vec2 const &vector) {
-  Vec2 sum;
-
-  sum.x = this->x + vector.x;
-  sum.y = this->y + vector.y;
-
-  return sum;
+  return Vec2(x + vector.x, y + vector.y);
 }
 
-Vec2 Vec2::operator*(float constant) {
-  Vec2 prod;
+Vec2 Vec2::operator-(Vec2 const &vector) {
+  return Vec2(x - vector.x, y - vector.y);
+}
 
-  prod.x = this->x * constant;
-  prod.y = this->y * constant;
+Vec2 Vec2::operator+(Rect rect) {
+  return Vec2(x + rect.x, y + rect.y);
+}
 
-  return prod;
+Vec2 Vec2::operator-(Rect rect) {
+  return Vec2(x - rect.x, y - rect.y);
+}
+
+Vec2 Vec2::operator*(const float rhs) const {
+   return Vec2(x * rhs, y * rhs);
 }

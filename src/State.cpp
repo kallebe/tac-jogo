@@ -8,6 +8,8 @@
 #include "CameraFollower.hpp"
 #include "Alien.hpp"
 #include "PenguinBody.hpp"
+#include "Collision.hpp"
+#include "Collider.hpp"
 
 State::State() : music("assets/audio/stageState.ogg") {
   quitRequested = false;
@@ -96,6 +98,28 @@ void State::Update(float dt) {
 
   for (uint i = 0; i < objectArray.size(); i++) {
     objectArray[i]->Update(dt);
+  }
+
+  // Verificar colisões
+  for (uint i = 0; i < objectArray.size(); i++) {
+    Collider *colliderA = (Collider*) objectArray[i]->GetComponent("Collider");
+
+    if (colliderA == nullptr)
+      continue;
+
+    for (uint j = i + 1; j < objectArray.size(); j++) {
+      Collider *colliderB = (Collider*) objectArray[j]->GetComponent("Collider");
+
+      if (colliderB == nullptr)
+        continue;
+      
+      bool isColliding = Collision::IsColliding(colliderA->box, colliderB->box, objectArray[i]->angleDeg, objectArray[j]->angleDeg);
+      
+      if (isColliding) {
+        objectArray[i]->NotifyCollision(*objectArray[j]);
+        objectArray[j]->NotifyCollision(*objectArray[i]);
+      }
+    }
   }
 
   for (uint i = 0; i < objectArray.size(); i++) {

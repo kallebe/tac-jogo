@@ -28,3 +28,7 @@ float Rect::GetMiddleX() {
 float Rect::GetMiddleY() {
   return y + h/2;
 }
+
+Rect Rect::GetCenter() {
+  return Rect(GetMiddleX(), GetMiddleY(), 0.0, 0.0);
+}

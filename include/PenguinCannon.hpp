@@ -19,6 +19,7 @@ class PenguinCannon : public Component {
     bool Is(string type);
     void Shoot();
     void Start() {}
+    void NotifyCollision(GameObject &other);
 };
 
 #endif

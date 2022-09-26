@@ -3,11 +3,17 @@
 #include "Camera.hpp"
 #include "Bullet.hpp"
 #include "Sprite.hpp"
+#include "Collider.hpp"
 #include "InputManager.hpp"
 
 PenguinCannon::PenguinCannon(GameObject &associated, weak_ptr<GameObject> penguinBody) : Component(associated) {
+  // Sprite
   Sprite *sp = new Sprite(associated, "assets/img/cubngun.png");
   associated.AddComponent(sp);
+
+  // Collider
+  Collider *col = new Collider(associated);
+  associated.AddComponent(col);
 
   pbody = penguinBody;
   angle = 0;
@@ -55,3 +61,6 @@ void PenguinCannon::Shoot() {
   game.GetState().AddObject(bulletGo);
 }
 
+void PenguinCannon::NotifyCollision(GameObject &other) {
+  pbody.lock()->NotifyCollision(other);
+}

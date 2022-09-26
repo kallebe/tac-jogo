@@ -5,6 +5,8 @@
 #include "Vec2.hpp"
 #include <queue>
 
+#define ALIEN_HP 40
+
 using namespace std;
 
 class Alien : public Component {
@@ -26,6 +28,8 @@ class Alien : public Component {
     void Render();
     void Start();
     bool Is(string type);
+    void NotifyCollision(GameObject &other);
+    void RemoveMinion(weak_ptr<GameObject> minion);
 };
 
 class Alien::Action {

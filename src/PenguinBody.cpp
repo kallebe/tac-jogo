@@ -2,20 +2,27 @@
 #include "PenguinCannon.hpp"
 #include "Game.hpp"
 #include "Sprite.hpp"
+#include "Bullet.hpp"
+#include "Collider.hpp"
 #include "InputManager.hpp"
 #include "Camera.hpp"
 #include <math.h>
 
 PenguinBody::PenguinBody(GameObject &associated) : Component(associated) {
+  // Sprite
   Sprite *sp = new Sprite(associated, "assets/img/penguin.png");
   associated.AddComponent(sp);
+
+  // Collider
+  Collider *col = new Collider(associated);
+  associated.AddComponent(col);
 
   speed.x     = 0.0;
   speed.y     = 0.0;
   pos.x       = associated.box.x;
   pos.y       = associated.box.y;
   linearSpeed = 0.0;
-  hp          = 100;
+  hp          = PENGUIN_HP;
   angle       = 0;
   player      = this;
 }
@@ -36,6 +43,9 @@ void PenguinBody::Start() {
   game.GetState().AddObject(pcGo);
 
   pcannon = game.GetState().GetObjectPtr(pcGo);
+
+  Camera &camera = Camera::GetInstance();
+  camera.Follow(&associated);
 }
 
 void PenguinBody::Update(float dt) {
@@ -66,11 +76,21 @@ void PenguinBody::Update(float dt) {
 
   associated.box.x = pos.x + camera.pos.x - associated.box.w/2;
   associated.box.y = pos.y + camera.pos.y - associated.box.h/2;
+}
 
-  // Deleção por hp
-  if (hp <= 0) {
-    pcannon.lock()->RequestDelete();
-    associated.RequestDelete();
+void PenguinBody::NotifyCollision(GameObject &other) {
+  if (other.GetComponent("Bullet") != nullptr) {
+    Camera &camera = Camera::GetInstance();
+    Bullet *bullet = (Bullet*) other.GetComponent("Bullet");
+
+    hp -= bullet->GetDamage();
+
+    // Deleção por hp
+    if (hp <= 0) {
+      camera.Unfollow();
+      pcannon.lock()->RequestDelete();
+      associated.RequestDelete();
+    }
   }
 }
 
@@ -80,4 +100,3 @@ void PenguinBody::Render() {
 bool PenguinBody::Is(string type) {
   return type == "PenguinBody";
 }
-
