@@ -9,7 +9,7 @@ class Vec2 {
 
     Vec2();
     Vec2(float x, float y);
-    Vec2 GetRotated(float deg);
+    Vec2 Rotate( float rad);
     float Size();
 
     Vec2 operator+(Vec2 const &vector);

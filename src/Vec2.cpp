@@ -11,11 +11,11 @@ Vec2::Vec2(float x, float y) {
   this->y = y;
 }
 
-Vec2 Vec2::GetRotated(float deg) {
+Vec2 Vec2::Rotate(float rad) {
   Vec2 rotated;
 
-  rotated.x = x * cos(deg) - y * sin(deg);
-  rotated.y = y * cos(deg) + x * sin(deg);
+  rotated.x = x * cos(rad) - y * sin(rad);
+  rotated.y = y * cos(rad) + x * sin(rad);
 
   return rotated;
 }

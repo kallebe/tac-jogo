@@ -45,7 +45,7 @@ void PenguinBody::Start() {
   pcannon = game.GetState().GetObjectPtr(pcGo);
 
   Camera &camera = Camera::GetInstance();
-  camera.Follow(&associated);
+  // camera.Follow(&associated);
 }
 
 void PenguinBody::Update(float dt) {
@@ -82,6 +82,9 @@ void PenguinBody::NotifyCollision(GameObject &other) {
   if (other.GetComponent("Bullet") != nullptr) {
     Camera &camera = Camera::GetInstance();
     Bullet *bullet = (Bullet*) other.GetComponent("Bullet");
+
+    if (!bullet->targetsPlayer)
+      return;
 
     hp -= bullet->GetDamage();
 

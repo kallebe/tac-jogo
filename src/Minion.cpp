@@ -18,7 +18,7 @@ Minion::Minion(GameObject &associated, weak_ptr<GameObject> alienCenter, float a
   associated.AddComponent(sp);
 
   // Collider
-  Collider *col = new Collider(associated);
+  Collider *col = new Collider(associated, { scale, scale });
   associated.AddComponent(col);
 
   this->alienCenter = alienCenter;
@@ -38,7 +38,7 @@ void Minion::Start() {
 }
 
 void Minion::Update(float dt) {
-  arc += DESLOCAMENTO_ARCO;
+  // arc += DESLOCAMENTO_ARCO;
   shared_ptr<GameObject> alienCenterPtr = alienCenter.lock();
 
   if (!alienCenterPtr) {
@@ -49,7 +49,7 @@ void Minion::Update(float dt) {
   associated.box.x = cos(arc * PI / 180) * RAIO_CIRCULO + alienCenterPtr->box.x + alienCenterPtr->box.w/2 - associated.box.w/2;
   associated.box.y = sin(arc * PI / 180) * RAIO_CIRCULO + alienCenterPtr->box.y + alienCenterPtr->box.h/2 - associated.box.h/2;
 
-  associated.angleDeg += DESLOCAMENTO_ARCO;
+  // associated.angleDeg += DESLOCAMENTO_ARCO;
 }
 
 bool Minion::Is(string type) {
@@ -66,7 +66,7 @@ void Minion::Shoot(Vec2 target) {
   bulletGo->box.x = this->associated.box.GetMiddleX();
   bulletGo->box.y = this->associated.box.GetMiddleY();
 
-  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet2.png", 3, 2000000.0);
+  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet2.png", 3, 2000000.0, true);
   bulletGo->AddComponent(bullet);
 
   game.GetState().AddObject(bulletGo);
@@ -74,6 +74,11 @@ void Minion::Shoot(Vec2 target) {
 
 void Minion::NotifyCollision(GameObject &other) {
   if (other.GetComponent("Bullet") != nullptr) {
+    Bullet *bullet = (Bullet*) other.GetComponent("Bullet");
+
+    if (bullet->targetsPlayer)
+      return;
+
     Game &game = Game::GetInstance();
     Alien *alien = (Alien*) alienCenter.lock()->GetComponent("Alien");
 

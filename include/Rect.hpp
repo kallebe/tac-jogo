@@ -1,6 +1,7 @@
 #ifndef RECT_HPP
 #define RECT_HPP
 
+class Vec2;
 class Rect {
   public:
     float x, y, w, h;
@@ -10,7 +11,7 @@ class Rect {
     
     float GetMiddleX();
     float GetMiddleY();
-    Rect  GetCenter();
+    Vec2  GetCenter();
     bool Contains(float x, float y);
 };
 

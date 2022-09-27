@@ -52,10 +52,10 @@ void PenguinCannon::Shoot() {
   Game &game = Game::GetInstance();
   GameObject *bulletGo = new GameObject();
 
-  bulletGo->box.x = associated.box.x + associated.box.w * (0.5 * cos(angle) + 0.5);
-  bulletGo->box.y = associated.box.GetMiddleY() + associated.box.w * 0.5 * sin(angle);
+  bulletGo->box.x = associated.box.x + associated.box.w * cos(angle);
+  bulletGo->box.y = associated.box.GetMiddleY() + associated.box.w * sin(angle);
 
-  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet2.png", 3, 2000000.0);
+  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet2.png", 3, 2000000.0, false);
   bulletGo->AddComponent(bullet);
 
   game.GetState().AddObject(bulletGo);

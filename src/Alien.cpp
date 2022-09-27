@@ -15,7 +15,7 @@ Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
   associated.AddComponent(sp);
 
   // Collider
-  Collider *col = new Collider(associated);
+  Collider *col = new Collider(associated, { 0.6, 0.6 });
   associated.AddComponent(col);
 
   hp       = ALIEN_HP;
@@ -116,6 +116,10 @@ bool Alien::Is(string type) {
 void Alien::NotifyCollision(GameObject &other) {
   if (other.GetComponent("Bullet") != nullptr) {
     Bullet *bullet = (Bullet*) other.GetComponent("Bullet");
+
+    if (bullet->targetsPlayer)
+      return;
+
     hp -= bullet->GetDamage();
   }
 }

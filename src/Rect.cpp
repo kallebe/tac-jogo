@@ -1,4 +1,6 @@
 #include "Rect.hpp"
+#include "Vec2.hpp"
+#include <math.h>
 
 Rect::Rect() {
   x = 0.0;
@@ -29,6 +31,6 @@ float Rect::GetMiddleY() {
   return y + h/2;
 }
 
-Rect Rect::GetCenter() {
-  return Rect(GetMiddleX(), GetMiddleY(), 0.0, 0.0);
+Vec2 Rect::GetCenter() {
+  return Vec2(GetMiddleX(), GetMiddleY());
 }

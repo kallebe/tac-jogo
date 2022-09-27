@@ -17,7 +17,9 @@ class Bullet : public Component {
     int   damage;
   
   public:
-    Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, string sprite, int frameCount, float frameTime);
+    bool targetsPlayer;
+
+    Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, string sprite, int frameCount, float frameTime, bool targetsPlayer);
 
     void Update(float dt);
     void Render() {};
