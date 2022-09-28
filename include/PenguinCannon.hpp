@@ -2,7 +2,11 @@
 #define PENGUIN_CANNON_HPP
 
 #include "Component.hpp"
+#include "Timer.hpp"
 #include "Vec2.hpp"
+
+// Cooldown em microsegundos para proximo tiro
+#define COOLDOWN_TIME 5000000
 
 using namespace std;
 
@@ -10,6 +14,7 @@ class PenguinCannon : public Component {
   private:
     weak_ptr<GameObject> pbody;
     float angle;
+    Timer cooldown;
 
   public:
     PenguinCannon(GameObject &associated, weak_ptr<GameObject> penguinBody);

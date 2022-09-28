@@ -25,6 +25,7 @@ class Sound : public Component {
 
     void Update(float dt) {};
     void Render() {};
+    void Start() {};
     bool Is(string type);
 };
 

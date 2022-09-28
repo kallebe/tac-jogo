@@ -4,9 +4,11 @@
 // #include "Game.hpp"
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL
-#include "SDL_include.h"
-#include "Vec2.hpp"
+
 #include "Component.hpp"
+#include "SDL_include.h"
+#include "Timer.hpp"
+#include "Vec2.hpp"
 #include <string>
 
 using namespace std;
@@ -22,10 +24,12 @@ class Sprite : public Component {
     int currentFrame;
     float timeElapsed;
     float frameTime;
+    float secondsToSelfDestruct;
+    Timer selfDestructCounter;
   
   public:
     Sprite(GameObject& associated);
-    Sprite(GameObject& associated, string file, int frameCount = 1, float frameTime = 1);
+    Sprite(GameObject& associated, string file, int frameCount = 1, float frameTime = 1, float secondsToSelfDestruct = 0);
     
     void Open(string file);
     void SetClip(int x, int y, int w, int h);

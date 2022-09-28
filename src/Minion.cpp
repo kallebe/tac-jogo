@@ -1,10 +1,11 @@
 #include "Minion.hpp"
+
 #include "Alien.hpp"
 #include "Bullet.hpp"
-#include "Game.hpp"
 #include "Camera.hpp"
-#include "Sprite.hpp"
 #include "Collider.hpp"
+#include "Game.hpp"
+#include "Sprite.hpp"
 #include <math.h>
 
 Minion::Minion(GameObject &associated, weak_ptr<GameObject> alienCenter, float arcOffsetDeg) : Component(associated) {
@@ -38,7 +39,7 @@ void Minion::Start() {
 }
 
 void Minion::Update(float dt) {
-  // arc += DESLOCAMENTO_ARCO;
+  arc += DESLOCAMENTO_ARCO;
   shared_ptr<GameObject> alienCenterPtr = alienCenter.lock();
 
   if (!alienCenterPtr) {
@@ -49,7 +50,7 @@ void Minion::Update(float dt) {
   associated.box.x = cos(arc * PI / 180) * RAIO_CIRCULO + alienCenterPtr->box.x + alienCenterPtr->box.w/2 - associated.box.w/2;
   associated.box.y = sin(arc * PI / 180) * RAIO_CIRCULO + alienCenterPtr->box.y + alienCenterPtr->box.h/2 - associated.box.h/2;
 
-  // associated.angleDeg += DESLOCAMENTO_ARCO;
+  associated.angleDeg += DESLOCAMENTO_ARCO;
 }
 
 bool Minion::Is(string type) {

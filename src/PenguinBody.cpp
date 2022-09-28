@@ -1,11 +1,13 @@
 #include "PenguinBody.hpp"
-#include "PenguinCannon.hpp"
-#include "Game.hpp"
-#include "Sprite.hpp"
+
 #include "Bullet.hpp"
-#include "Collider.hpp"
-#include "InputManager.hpp"
 #include "Camera.hpp"
+#include "Collider.hpp"
+#include "Game.hpp"
+#include "InputManager.hpp"
+#include "PenguinCannon.hpp"
+#include "Sound.hpp"
+#include "Sprite.hpp"
 #include <math.h>
 
 PenguinBody::PenguinBody(GameObject &associated) : Component(associated) {
@@ -45,7 +47,7 @@ void PenguinBody::Start() {
   pcannon = game.GetState().GetObjectPtr(pcGo);
 
   Camera &camera = Camera::GetInstance();
-  // camera.Follow(&associated);
+  camera.Follow(&associated);
 }
 
 void PenguinBody::Update(float dt) {
@@ -93,6 +95,24 @@ void PenguinBody::NotifyCollision(GameObject &other) {
       camera.Unfollow();
       pcannon.lock()->RequestDelete();
       associated.RequestDelete();
+
+      if (associated.IsDead()) {
+        Game &game = Game::GetInstance();
+        GameObject *explosionGo = new GameObject();
+        explosionGo->box.x = associated.box.x;
+        explosionGo->box.y = associated.box.y;
+        
+        Sprite *explosion = new Sprite(*explosionGo, "assets/img/penguindeath.png", 5, 400000.0, 20.0);
+        explosionGo->AddComponent(explosion);
+
+        Sound *sound = new Sound(*explosionGo, "assets/audio/boom.wav");
+        explosionGo->AddComponent(sound);
+
+        if (sound != nullptr)
+          sound->Play();
+
+        game.GetState().AddObject(explosionGo);
+      }
     }
   }
 }

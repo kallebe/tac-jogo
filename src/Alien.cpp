@@ -1,11 +1,13 @@
 #include "Alien.hpp"
+
 #include "Bullet.hpp"
-#include "Minion.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
-#include "Sprite.hpp"
 #include "Game.hpp"
 #include "InputManager.hpp"
+#include "Minion.hpp"
+#include "Sound.hpp"
+#include "Sprite.hpp"
 #include <math.h>
 #include <iostream>
 
@@ -100,6 +102,24 @@ void Alien::Update(float dt) {
   // Remover Alien por dano
   if (hp <= 0)
     associated.RequestDelete();
+
+  if (associated.IsDead()) {
+    Game &game = Game::GetInstance();
+    GameObject *explosionGo = new GameObject();
+    explosionGo->box.x = associated.box.x;
+    explosionGo->box.y = associated.box.y;
+    
+    Sprite *explosion = new Sprite(*explosionGo, "assets/img/aliendeath.png", 4, 800000.0, 32.0);
+    explosionGo->AddComponent(explosion);
+
+    Sound *sound = new Sound(*explosionGo, "assets/audio/boom.wav");
+    explosionGo->AddComponent(sound);
+
+    if (sound != nullptr)
+      sound->Play();
+
+    game.GetState().AddObject(explosionGo);
+  }
 }
 
 void Alien::Render() {

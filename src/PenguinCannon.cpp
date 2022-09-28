@@ -1,10 +1,11 @@
 #include "PenguinCannon.hpp"
-#include "Game.hpp"
-#include "Camera.hpp"
+
 #include "Bullet.hpp"
-#include "Sprite.hpp"
+#include "Camera.hpp"
 #include "Collider.hpp"
+#include "Game.hpp"
 #include "InputManager.hpp"
+#include "Sprite.hpp"
 
 PenguinCannon::PenguinCannon(GameObject &associated, weak_ptr<GameObject> penguinBody) : Component(associated) {
   // Sprite
@@ -14,6 +15,9 @@ PenguinCannon::PenguinCannon(GameObject &associated, weak_ptr<GameObject> pengui
   // Collider
   Collider *col = new Collider(associated);
   associated.AddComponent(col);
+
+  // Timer
+  cooldown = Timer();
 
   pbody = penguinBody;
   angle = 0;
@@ -36,8 +40,12 @@ void PenguinCannon::Update(float dt) {
   angle = atan2(input.GetMouseY() + camera.pos.y - associated.box.GetMiddleY(), input.GetMouseX() + camera.pos.x - associated.box.GetMiddleX());
   associated.angleDeg = angle * 180 / M_PI;
 
-  if (input.MousePress(LEFT_MOUSE_BUTTON)) {
+  // Cooldown
+  cooldown.Update(dt);
+
+  if (input.MousePress(LEFT_MOUSE_BUTTON) && cooldown.Get() >= COOLDOWN_TIME) {
     Shoot();
+    cooldown.Restart();
   }
 }
 
@@ -55,7 +63,7 @@ void PenguinCannon::Shoot() {
   bulletGo->box.x = associated.box.x + associated.box.w * cos(angle);
   bulletGo->box.y = associated.box.GetMiddleY() + associated.box.w * sin(angle);
 
-  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet2.png", 3, 2000000.0, false);
+  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/penguinbullet.png", 4, 2000000.0, false);
   bulletGo->AddComponent(bullet);
 
   game.GetState().AddObject(bulletGo);
