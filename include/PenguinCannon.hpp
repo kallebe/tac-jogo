@@ -5,8 +5,8 @@
 #include "Timer.hpp"
 #include "Vec2.hpp"
 
-// Cooldown em microsegundos para proximo tiro
-#define COOLDOWN_TIME 5000000
+// Cooldown em segundos para proximo tiro
+#define COOLDOWN_TIME 5.0
 
 using namespace std;
 

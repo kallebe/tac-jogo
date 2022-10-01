@@ -6,6 +6,7 @@
 #include "Game.hpp"
 #include "InputManager.hpp"
 #include "Minion.hpp"
+#include "PenguinBody.hpp"
 #include "Sound.hpp"
 #include "Sprite.hpp"
 #include <math.h>
@@ -23,8 +24,8 @@ Alien::Alien(GameObject& associated, int numMinions, weak_ptr<GameObject> pbody)
 
   hp       = ALIEN_HP;
   nMinions = numMinions;
-  speed.x  = 0.00004;
-  speed.y  = 0.00004;
+  speed.x  = 40.0;
+  speed.y  = 40.0;
   pos.x    = associated.box.GetMiddleX();
   pos.y    = associated.box.GetMiddleY();
   this->pbody = pbody;
@@ -64,14 +65,13 @@ void Alien::Update(float dt) {
   if (pbody.expired())
     return;
 
+  PenguinBody *penguin = (PenguinBody*) pbody.lock()->GetComponent("PenguinBody");
+
   if (state == AlienState::RESTING) {
     restTimer.Update(dt);
 
     if (restTimer.Get() >= ALIEN_RESTING_TIME) {
-      Camera &camera = Camera::GetInstance();
-      cout << "Parou de descansar!" << endl;
-      destination = { pbody.lock()->box.GetMiddleX() - camera.pos.x, pbody.lock()->box.GetMiddleY() - camera.pos.y};
-      cout << "Dx: " << destination.x << ", Dy: " << destination.y << endl;
+      destination = penguin->GetPos();
       state = AlienState::MOVING;
 
     }
@@ -84,14 +84,15 @@ void Alien::Update(float dt) {
     bool withinLimitsY = abs(pos.y - destination.y) < dy;
 
     if (withinLimitsX || withinLimitsY) {
-      cout << "Chegou ao destino!" << endl;
       pos.x = destination.x;
       pos.y = destination.y;
 
-      destination = { pbody.lock()->box.GetMiddleX(), pbody.lock()->box.GetMiddleY()};
+      destination = penguin->GetPos();
 
-      Minion *minion = (Minion *) minionArray[rand() % minionArray.size()].lock().get()->GetComponent("Minion");
-      minion->Shoot(destination);
+      if (minionArray.size()) {
+        Minion *minion = (Minion *) minionArray[rand() % minionArray.size()].lock().get()->GetComponent("Minion");
+        minion->Shoot(destination);
+      }
 
       restTimer.Restart();
       state = AlienState::RESTING;
@@ -115,7 +116,7 @@ void Alien::Update(float dt) {
     explosionGo->box.x = associated.box.x;
     explosionGo->box.y = associated.box.y;
     
-    Sprite *explosion = new Sprite(*explosionGo, "assets/img/aliendeath.png", 4, 800000.0, 32.0);
+    Sprite *explosion = new Sprite(*explosionGo, "assets/img/aliendeath.png", 4, 2.0, 8.0);
     explosionGo->AddComponent(explosion);
 
     Sound *sound = new Sound(*explosionGo, "assets/audio/boom.wav");

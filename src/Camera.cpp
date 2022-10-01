@@ -34,8 +34,8 @@ void Camera::Update(float dt) {
 }
 
 Camera::Camera() {
-  speed.x = 0.0001;
-  speed.y = 0.0001;
+  speed.x = 1.0;
+  speed.y = 1.0;
 }
 
 Camera& Camera::GetInstance() {

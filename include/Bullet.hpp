@@ -4,7 +4,7 @@
 #include "Component.hpp"
 #include "Vec2.hpp"
 
-#define BULLET_SPEED        0.00004
+#define BULLET_SPEED        40.0
 #define BULLET_DAMAGE       5
 #define BULLET_MAX_DISTANCE 1500
 
@@ -13,6 +13,7 @@ using namespace std;
 class Bullet : public Component {
   private:
     Vec2  speed;
+    Vec2  pos;
     float distanceLeft;
     int   damage;
   

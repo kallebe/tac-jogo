@@ -63,7 +63,7 @@ void PenguinCannon::Shoot() {
   bulletGo->box.x = associated.box.x + associated.box.w * cos(angle);
   bulletGo->box.y = associated.box.GetMiddleY() + associated.box.w * sin(angle);
 
-  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/penguinbullet.png", 4, 2000000.0, false);
+  Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/penguinbullet.png", 4, 2.0, false);
   bulletGo->AddComponent(bullet);
 
   game.GetState().AddObject(bulletGo);

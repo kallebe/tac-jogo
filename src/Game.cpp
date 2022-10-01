@@ -46,7 +46,7 @@ Game::Game(string title, int width, int height) {
 
   // Inicializando variaveis de temporização
   frameStart = 0;
-  dt = SDL_GetTicks() * 1000;
+  dt = SDL_GetTicks() / 1000.0;
 }
 
 Game::~Game() {
@@ -86,7 +86,7 @@ Game& Game::GetInstance() {
 }
 
 void Game::CalulaDeltaTime() {
-  int currentTime = SDL_GetTicks() * 1000;
+  int currentTime = SDL_GetTicks() / 1000.0;
 
   dt = currentTime - frameStart;
   frameStart = currentTime;

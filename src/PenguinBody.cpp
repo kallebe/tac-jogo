@@ -102,7 +102,7 @@ void PenguinBody::NotifyCollision(GameObject &other) {
         explosionGo->box.x = associated.box.x;
         explosionGo->box.y = associated.box.y;
         
-        Sprite *explosion = new Sprite(*explosionGo, "assets/img/penguindeath.png", 5, 400000.0, 20.0);
+        Sprite *explosion = new Sprite(*explosionGo, "assets/img/penguindeath.png", 5, 2.0, 10.0);
         explosionGo->AddComponent(explosion);
 
         Sound *sound = new Sound(*explosionGo, "assets/audio/boom.wav");
@@ -115,6 +115,10 @@ void PenguinBody::NotifyCollision(GameObject &other) {
       }
     }
   }
+}
+
+Vec2 PenguinBody::GetPos() {
+  return pos;
 }
 
 void PenguinBody::Render() {

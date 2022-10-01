@@ -48,7 +48,7 @@ void Sprite::Update(float dt) {
     return;
   
   if (secondsToSelfDestruct > 0) {
-    selfDestructCounter.Update(dt/100000);
+    selfDestructCounter.Update(dt);
   
     if (selfDestructCounter.Get() >= secondsToSelfDestruct)
       associated.RequestDelete();

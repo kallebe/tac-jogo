@@ -1,8 +1,9 @@
 #include "Bullet.hpp"
+
+#include "Camera.hpp"
 #include "Collider.hpp"
 #include "Sprite.hpp"
 #include <math.h>
-#include <iostream>
 
 Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, float maxDistance, string sprite, int frameCount, float frameTime, bool targetsPlayer) : Component(associated) {
   // Sprite
@@ -12,6 +13,10 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
   associated.angleDeg = angle * 180 / M_PI;
   associated.box.y -= cos(angle) * associated.box.h / 2;
   associated.box.y -= sin(angle) * associated.box.w / 2;
+
+  Camera &camera = Camera::GetInstance();
+  pos.x = associated.box.x - camera.pos.x;
+  pos.y = associated.box.y - camera.pos.y;
 
   // Collider
   Collider *col = new Collider(associated, { 0.3, 1 }, { -associated.box.w/3, 0 });
@@ -27,12 +32,15 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
 
 void Bullet::Update(float dt) {
   Vec2 displacement = speed * dt;
+  Camera &camera = Camera::GetInstance();
 
-  this->associated.box.x += displacement.x;
-  this->associated.box.y += displacement.y;
+  pos = pos + displacement;
+
+  this->associated.box.x = pos.x + displacement.x + camera.pos.x - associated.box.w/2;
+  this->associated.box.y = pos.y + displacement.y + camera.pos.y - associated.box.h/2;
   this->distanceLeft -= displacement.Size();
 
-  if (this->distanceLeft <= 0)
+  if (distanceLeft <= 0)
     associated.RequestDelete();
 }
 

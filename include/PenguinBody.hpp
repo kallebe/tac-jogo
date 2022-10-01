@@ -4,9 +4,9 @@
 #include "Component.hpp"
 #include "Vec2.hpp"
 
-#define PENGUIN_ACCELERATION  0.00001
-#define MAX_PENGUIN_SPEED     0.0004
-#define PENGUIN_ANGULAR_SPEED 0.00004
+#define PENGUIN_ACCELERATION  10.0
+#define MAX_PENGUIN_SPEED     100.0
+#define PENGUIN_ANGULAR_SPEED 40.0
 
 #define PENGUIN_HP 100
 
@@ -32,6 +32,7 @@ class PenguinBody : public Component {
     void Render();
     bool Is(string type);
     void NotifyCollision(GameObject &other);
+    Vec2 GetPos();
 };
 
 #endif
