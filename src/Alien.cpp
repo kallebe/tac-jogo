@@ -9,9 +9,10 @@
 #include "Sound.hpp"
 #include "Sprite.hpp"
 #include <math.h>
-#include <iostream>
 
-Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
+int Alien::alienCount = 0;
+
+Alien::Alien(GameObject& associated, int numMinions, weak_ptr<GameObject> pbody) : Component(associated) {
   // Sprite
   Sprite *sp = new Sprite(associated, "assets/img/alien.png");
   associated.AddComponent(sp);
@@ -26,10 +27,17 @@ Alien::Alien(GameObject& associated, int numMinions) : Component(associated) {
   speed.y  = 0.00004;
   pos.x    = associated.box.GetMiddleX();
   pos.y    = associated.box.GetMiddleY();
+  this->pbody = pbody;
+
+  state     = AlienState::RESTING;
+  restTimer = Timer();
+
+  alienCount++;
 }
 
 Alien::~Alien() {
   minionArray.clear();
+  alienCount--;
 }
 
 void Alien::Start() {
@@ -53,46 +61,44 @@ void Alien::Start() {
 }
 
 void Alien::Update(float dt) {
-  InputManager &input = InputManager::GetInstance();
-  // Verificando novas ações
-  if (input.MousePress(LEFT_MOUSE_BUTTON) && minionArray.size()) {
-    Action shoot = Action(Action::ActionType::SHOOT, input.GetMouseX(), input.GetMouseY());
-    taskQueue.push(shoot);
+  if (pbody.expired())
+    return;
 
-  } else if (input.MousePress(RIGHT_MOUSE_BUTTON)) {
-    Action move = Action(Action::ActionType::MOVE, input.GetMouseX(), input.GetMouseY());
-    taskQueue.push(move);
-  }
+  if (state == AlienState::RESTING) {
+    restTimer.Update(dt);
 
-  // Executar ações pendentes
-  if (taskQueue.size()) {
-    Action task = taskQueue.front();
+    if (restTimer.Get() >= ALIEN_RESTING_TIME) {
+      Camera &camera = Camera::GetInstance();
+      cout << "Parou de descansar!" << endl;
+      destination = { pbody.lock()->box.GetMiddleX() - camera.pos.x, pbody.lock()->box.GetMiddleY() - camera.pos.y};
+      cout << "Dx: " << destination.x << ", Dy: " << destination.y << endl;
+      state = AlienState::MOVING;
 
-    if (task.type == Action::ActionType::MOVE) {
-      float angle = atan2(task.pos.y-pos.y, task.pos.x-pos.x);
-      float dx = speed.x * cos(angle) * dt;
-      float dy = speed.y * sin(angle) * dt;
-
-      bool withinLimitsX = abs(pos.x - task.pos.x) < dx;
-      bool withinLimitsY = abs(pos.y - task.pos.y) < dy;
-
-      if (withinLimitsX || withinLimitsY) {
-        pos.x = task.pos.x;
-        pos.y = task.pos.y;
-
-        taskQueue.pop();  // Finaliza tarefa
-
-      } else {
-        pos.x += dx;
-        pos.y += dy;
-      }
     }
+  } else {
+    float angle = atan2(destination.y - pos.y, destination.x - pos.x);
+    float dx = speed.x * cos(angle) * dt;
+    float dy = speed.y * sin(angle) * dt;
 
-    if (task.type == Action::ActionType::SHOOT) {
+    bool withinLimitsX = abs(pos.x - destination.x) < dx;
+    bool withinLimitsY = abs(pos.y - destination.y) < dy;
+
+    if (withinLimitsX || withinLimitsY) {
+      cout << "Chegou ao destino!" << endl;
+      pos.x = destination.x;
+      pos.y = destination.y;
+
+      destination = { pbody.lock()->box.GetMiddleX(), pbody.lock()->box.GetMiddleY()};
+
       Minion *minion = (Minion *) minionArray[rand() % minionArray.size()].lock().get()->GetComponent("Minion");
-      
-      minion->Shoot(task.pos);
-      taskQueue.pop();
+      minion->Shoot(destination);
+
+      restTimer.Restart();
+      state = AlienState::RESTING;
+
+    } else {
+      pos.x += dx;
+      pos.y += dy;
     }
   }
 
@@ -148,10 +154,4 @@ void Alien::RemoveMinion(weak_ptr<GameObject> minion) {
   for (int i = minionArray.size() - 1; i >= 0; i--)
     if (minionArray[i].lock() == minion.lock())
       minionArray.erase(minionArray.begin() + i);
-}
-
-Alien::Action::Action::Action(ActionType type, float x, float y) {
-  this->type  = type;
-  pos.x       = x;
-  pos.y       = y;
 }

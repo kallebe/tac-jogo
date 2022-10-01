@@ -2,10 +2,12 @@
 #define ALIEN_HPP
 
 #include "Component.hpp"
+#include "Timer.hpp"
 #include "Vec2.hpp"
 #include <queue>
 
 #define ALIEN_HP 40
+#define ALIEN_RESTING_TIME 5
 
 using namespace std;
 
@@ -15,13 +17,19 @@ class Alien : public Component {
     Vec2  pos;
     int   hp;
     int   nMinions;
-    class Action;
+    weak_ptr<GameObject> pbody;
+
+    enum  AlienState { MOVING, RESTING };
+    AlienState  state;
+    Timer       restTimer;
+    Vec2        destination;
 
     vector<weak_ptr<GameObject>> minionArray;
-    queue<Action> taskQueue;
   
   public:
-    Alien(GameObject& associated, int numMinions);
+    static int alienCount;
+
+    Alien(GameObject& associated, int numMinions, weak_ptr<GameObject> pbody);
     ~Alien();
 
     void Update(float dt);
@@ -30,17 +38,6 @@ class Alien : public Component {
     bool Is(string type);
     void NotifyCollision(GameObject &other);
     void RemoveMinion(weak_ptr<GameObject> minion);
-};
-
-class Alien::Action {
-  public:
-    enum ActionType { MOVE, SHOOT };
-
-    Vec2  pos;
-    float angle;
-    ActionType type;
-
-    Action(ActionType type, float x, float y);
 };
 
 #endif

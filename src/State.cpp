@@ -39,16 +39,6 @@ State::State() : music("assets/audio/stageState.ogg") {
 
 	objectArray.emplace_back(tm);
 
-  // Alien
-  GameObject *alienObj = new GameObject();
-  alienObj->box.x = 512;
-  alienObj->box.y = 300;
-
-  Alien *alien = new Alien(*alienObj, 5);
-  alienObj->AddComponent(alien);
-
-  objectArray.emplace_back(alienObj);
-
   // Penguin
   GameObject *penguinObj = new GameObject();
   penguinObj->box.x = 704;
@@ -58,6 +48,16 @@ State::State() : music("assets/audio/stageState.ogg") {
   penguinObj->AddComponent(pbody);
 
   objectArray.emplace_back(penguinObj);
+
+  // Alien
+  GameObject *alienObj = new GameObject();
+  alienObj->box.x = 512;
+  alienObj->box.y = 300;
+
+  Alien *alien  = new Alien(*alienObj, 5, GetObjectPtr(penguinObj));
+  alienObj->AddComponent(alien);
+
+  objectArray.emplace_back(alienObj);
 
   if (music.IsOpen())
     music.Play();
