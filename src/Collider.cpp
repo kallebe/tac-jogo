@@ -20,8 +20,8 @@ void Collider::Update(float dt) {
   this->box = associated.box;
   this->box.w *= scale.x;
   this->box.h *= scale.y;
-  this->box.x  = associated.box.GetMiddleX() - this->box.w/2 + this->offset.x * cos(associated.angleDeg * M_PI / 180);
-  this->box.y  = associated.box.GetMiddleY() - this->box.h/2 + this->offset.y * sin(associated.angleDeg * M_PI / 180);
+  this->box.x  = associated.box.GetMiddleX() - this->box.w/2 + this->offset.x;
+  this->box.y  = associated.box.GetMiddleY() - this->box.h/2 + this->offset.y;
 }
 
 void Collider::Render() {

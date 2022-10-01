@@ -11,15 +11,20 @@ Bullet::Bullet(GameObject &associated, float angle, float speed, int damage, flo
   associated.AddComponent(sp);
 
   associated.angleDeg = angle * 180 / M_PI;
-  associated.box.y -= cos(angle) * associated.box.h / 2;
-  associated.box.y -= sin(angle) * associated.box.w / 2;
+
+  float colisionScale = 1.0 / frameCount;
+  associated.box.x -= colisionScale * associated.box.w / 2;
+  associated.box.y -= associated.box.h / 2;
 
   Camera &camera = Camera::GetInstance();
   pos.x = associated.box.x - camera.pos.x;
   pos.y = associated.box.y - camera.pos.y;
 
   // Collider
-  Collider *col = new Collider(associated, { 0.3, 1 }, { -associated.box.w/3, 0 });
+  Vec2 colOffset = { 0, 0};
+  colOffset.x = -associated.box.w/2 + (colisionScale * associated.box.w/2);
+
+  Collider *col = new Collider(associated, { colisionScale, 1 }, colOffset);
   associated.AddComponent(col);
 
   this->speed.x = speed * cos(angle);
@@ -36,8 +41,8 @@ void Bullet::Update(float dt) {
 
   pos = pos + displacement;
 
-  this->associated.box.x = pos.x + displacement.x + camera.pos.x - associated.box.w/2;
-  this->associated.box.y = pos.y + displacement.y + camera.pos.y - associated.box.h/2;
+  this->associated.box.x = pos.x + displacement.x + camera.pos.x;
+  this->associated.box.y = pos.y + displacement.y + camera.pos.y;
   this->distanceLeft -= displacement.Size();
 
   if (distanceLeft <= 0)
