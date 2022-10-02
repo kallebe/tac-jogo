@@ -7,7 +7,7 @@
 #include <queue>
 
 #define ALIEN_HP 40
-#define ALIEN_RESTING_TIME 5
+#define ALIEN_MAX_RESTING_TIME 10
 
 using namespace std;
 
@@ -22,6 +22,7 @@ class Alien : public Component {
     enum  AlienState { MOVING, RESTING };
     AlienState  state;
     Timer       restTimer;
+    int         restTime;
     Vec2        destination;
 
     vector<weak_ptr<GameObject>> minionArray;

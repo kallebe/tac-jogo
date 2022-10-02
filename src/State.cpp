@@ -57,7 +57,15 @@ State::State() : music("assets/audio/stageState.ogg") {
   Alien *alien  = new Alien(*alienObj, 5, GetObjectPtr(penguinObj));
   alienObj->AddComponent(alien);
 
+  GameObject *alienObj2 = new GameObject();
+  alienObj2->box.x = 1024;
+  alienObj2->box.y = 800;
+
+  Alien *alien2  = new Alien(*alienObj2, 6, GetObjectPtr(penguinObj));
+  alienObj2->AddComponent(alien2);
+
   objectArray.emplace_back(alienObj);
+  objectArray.emplace_back(alienObj2);
 
   if (music.IsOpen())
     music.Play();

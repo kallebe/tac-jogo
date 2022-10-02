@@ -32,6 +32,7 @@ Alien::Alien(GameObject& associated, int numMinions, weak_ptr<GameObject> pbody)
 
   state     = AlienState::RESTING;
   restTimer = Timer();
+  restTime  = (rand() % ALIEN_MAX_RESTING_TIME) + 1;
 
   alienCount++;
 }
@@ -70,7 +71,7 @@ void Alien::Update(float dt) {
   if (state == AlienState::RESTING) {
     restTimer.Update(dt);
 
-    if (restTimer.Get() >= ALIEN_RESTING_TIME) {
+    if (restTimer.Get() >= restTime) {
       destination = penguin->GetPos();
       state = AlienState::MOVING;
 
@@ -95,6 +96,8 @@ void Alien::Update(float dt) {
       }
 
       restTimer.Restart();
+      restTime  = (rand() % ALIEN_MAX_RESTING_TIME) + 1;
+
       state = AlienState::RESTING;
 
     } else {
