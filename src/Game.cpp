@@ -1,4 +1,6 @@
-#include "../include/Game.hpp"
+#include "Game.hpp"
+
+#include "InputManager.hpp"
 #include "Resources.hpp"
 #include <time.h>
 
@@ -42,7 +44,7 @@ Game::Game(string title, int width, int height) {
   renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 
   // Inicializando state
-  state = new State();
+  storedState = nullptr;
 
   // Inicializando variaveis de temporização
   frameStart = 0;
@@ -50,6 +52,21 @@ Game::Game(string title, int width, int height) {
 }
 
 Game::~Game() {
+  // Remove storedState
+  if (storedState != nullptr)
+    storedState = nullptr;
+  
+  // Esvazia pilha de States
+  while (!stateStack.empty())
+    stateStack.pop();
+
+  // Limpa Resourses
+  Resources &res = Resources::GetInstance();
+
+  res.ClearImages();
+  res.ClearMusics();
+  res.ClearSounds();
+
   Mix_CloseAudio();
   Mix_Quit();
   IMG_Quit();
@@ -58,8 +75,12 @@ Game::~Game() {
   SDL_Quit();
 }
 
-State& Game::GetState() {
-  return *state;
+State& Game::GetCurrentState() {
+  return *stateStack.top();
+}
+
+void Game::Push(State *state) {
+  storedState = state;
 }
 
 SDL_Renderer* Game::GetRenderer() {
@@ -67,9 +88,39 @@ SDL_Renderer* Game::GetRenderer() {
 }
 
 void Game::Run() {
-  state->Start();
-  state->Run();
+  stateStack.push(unique_ptr<State>(storedState));
+  storedState = nullptr;
 
+  if (stateStack.top() == nullptr)
+    return;
+  
+  GetCurrentState().Start();
+
+  while (!stateStack.empty() && !GetCurrentState().QuitRequested()) {
+    if (GetCurrentState().QuitRequested()) {
+      stateStack.pop();
+
+      if (!stateStack.empty())
+        GetCurrentState().Resume();
+    }
+
+    if (storedState != nullptr) {
+      GetCurrentState().Pause();
+      stateStack.push(unique_ptr<State>(storedState));
+
+      GetCurrentState().Start();
+    }
+
+    InputManager &input = InputManager::GetInstance();
+    input.Update();
+
+    GetCurrentState().Update(dt);
+    GetCurrentState().Render();
+    SDL_RenderPresent(GetRenderer());
+    SDL_Delay(33);
+  }
+
+  // Limpa Resourses
   Resources &res = Resources::GetInstance();
 
   res.ClearImages();

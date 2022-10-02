@@ -66,7 +66,7 @@ void PenguinCannon::Shoot() {
   Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/penguinbullet.png", 4, 2.0, false);
   bulletGo->AddComponent(bullet);
 
-  game.GetState().AddObject(bulletGo);
+  game.GetCurrentState().AddObject(bulletGo);
 }
 
 void PenguinCannon::NotifyCollision(GameObject &other) {

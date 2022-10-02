@@ -35,16 +35,16 @@ PenguinBody::~PenguinBody() {
 
 void PenguinBody::Start() {
   Game &game = Game::GetInstance();
-  weak_ptr<GameObject> pbody = game.GetState().GetObjectPtr(&associated);
+  weak_ptr<GameObject> pbody = game.GetCurrentState().GetObjectPtr(&associated);
 
   GameObject *pcGo = new GameObject();
 
   PenguinCannon *penguinCannon = new PenguinCannon(*pcGo, pbody);
   pcGo->AddComponent(penguinCannon);
 
-  game.GetState().AddObject(pcGo);
+  game.GetCurrentState().AddObject(pcGo);
 
-  pcannon = game.GetState().GetObjectPtr(pcGo);
+  pcannon = game.GetCurrentState().GetObjectPtr(pcGo);
 
   Camera &camera = Camera::GetInstance();
   camera.Follow(&associated);
@@ -111,7 +111,7 @@ void PenguinBody::NotifyCollision(GameObject &other) {
         if (sound != nullptr)
           sound->Play();
 
-        game.GetState().AddObject(explosionGo);
+        game.GetCurrentState().AddObject(explosionGo);
       }
     }
   }

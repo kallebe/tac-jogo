@@ -44,7 +44,7 @@ Alien::~Alien() {
 
 void Alien::Start() {
   Game &game = Game::GetInstance();
-  weak_ptr<GameObject> alienCenter = game.GetState().GetObjectPtr(&associated);
+  weak_ptr<GameObject> alienCenter = game.GetCurrentState().GetObjectPtr(&associated);
 
   if (!alienCenter.lock()) {
     return;
@@ -58,7 +58,7 @@ void Alien::Start() {
     Minion *minion = new Minion(*minionGo, alienCenter, i * darc);
     minionGo->AddComponent(minion);
 
-    minionArray.push_back(game.GetState().AddObject(minionGo));
+    minionArray.push_back(game.GetCurrentState().AddObject(minionGo));
   }
 }
 
@@ -128,7 +128,7 @@ void Alien::Update(float dt) {
     if (sound != nullptr)
       sound->Play();
 
-    game.GetState().AddObject(explosionGo);
+    game.GetCurrentState().AddObject(explosionGo);
   }
 }
 

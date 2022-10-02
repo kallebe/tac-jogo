@@ -1,33 +1,39 @@
 #ifndef STATE_HPP
 #define STATE_HPP
 
-#include "Sprite.hpp"
-#include "Music.hpp"
+#include "GameObject.hpp"
 #include <memory>
 
 using namespace std;
 
 class State {
-  private:
+  protected:
     bool    quitRequested;
+    bool    popRequested;
     bool    started;
-    Sprite *bg;
-    Music   music;
     vector<shared_ptr<GameObject>> objectArray;
+
+    void StartArray();
+    void virtual UpdateArray(float dt);
+    void virtual RenderArray();
 
   public:
     State();
-    ~State();
+    virtual ~State();
 
-    void LoadAssets();
-    void Update(float dt);
-    void Render();
+    void virtual LoadAssets() = 0;
+    void virtual Update(float dt) = 0;
+    void virtual Render() = 0;
+    
+    void virtual Start() = 0;
+    void virtual Pause() = 0;
+    void virtual Resume() = 0;
+
+    weak_ptr<GameObject> virtual AddObject(GameObject *go);
+    weak_ptr<GameObject> virtual GetObjectPtr(GameObject *go);
+
     bool QuitRequested();
-    void Run();
-    // void AddObject(int mouseX, int mouseY);
-    void Start();
-    weak_ptr<GameObject> AddObject(GameObject *go);
-    weak_ptr<GameObject> GetObjectPtr(GameObject *go);
+    bool PopRequested();
 };
 
 #endif

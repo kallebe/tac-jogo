@@ -70,7 +70,7 @@ void Minion::Shoot(Vec2 target) {
   Bullet *bullet = new Bullet(*bulletGo, angle, BULLET_SPEED, BULLET_DAMAGE, BULLET_MAX_DISTANCE, "assets/img/minionbullet2.png", 3, 2.0, true);
   bulletGo->AddComponent(bullet);
 
-  game.GetState().AddObject(bulletGo);
+  game.GetCurrentState().AddObject(bulletGo);
 }
 
 void Minion::NotifyCollision(GameObject &other) {
@@ -83,7 +83,7 @@ void Minion::NotifyCollision(GameObject &other) {
     Game &game = Game::GetInstance();
     Alien *alien = (Alien*) alienCenter.lock()->GetComponent("Alien");
 
-    alien->RemoveMinion(game.GetState().GetObjectPtr(&associated));
+    alien->RemoveMinion(game.GetCurrentState().GetObjectPtr(&associated));
 
     associated.RequestDelete();
   }

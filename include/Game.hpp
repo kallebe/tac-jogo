@@ -4,9 +4,10 @@
 #define INCLUDE_SDL_MIXER
 #define INCLUDE_SDL_IMAGE
 #define INCLUDE_SDL
+
 #include "SDL_include.h"
 #include "State.hpp"
-#include <iostream>
+#include <stack>
 #include <string>
 
 #define SCREEN_WIDTH  1024
@@ -19,21 +20,25 @@ class Game {
     static Game   *instance;
     SDL_Window    *window;
     SDL_Renderer  *renderer;
-    State         *state;
+    State         *storedState;
+    stack<unique_ptr<State>> stateStack;
 
     int   frameStart;
     float dt;
 
-    Game(string title, int width, int height);
     void CalulaDeltaTime();
 
   public:
+    Game(string title, int width, int height);
     ~Game();
-    State&        GetState();
+
+    static Game &GetInstance();
     SDL_Renderer *GetRenderer();
-    void          Run();
-    static Game  &GetInstance();
-    float         GetDeltaTime();
+    State &GetCurrentState();
+
+    void Push(State *state);
+    void Run();
+    float GetDeltaTime();
 };
 
 #endif
