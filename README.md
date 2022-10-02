@@ -1,7 +1,13 @@
-﻿# JOGO - Tópicos Avançados de Computação - 2021/1
+﻿# JOGO - Tópicos Avançados de Computação/ Introdução a Desenvolvimento de Jogos
 
 **Aluno:** Kallebe de Sousa Silva
 
-**Mat:** 180053485
+### Execução
 
-![image](https://user-images.githubusercontent.com/43591850/141209168-ccee32b7-5202-4798-95b9-0033fff6e482.png)
+No diretório do Jogo, executar os comandos:
+
+`make`
+
+`./JOGO`
+
+![image](https://user-images.githubusercontent.com/43591850/193433497-cc5dfe7f-e9a2-4b38-a933-2bd2eee38b2e.png)
