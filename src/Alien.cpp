@@ -4,6 +4,7 @@
 #include "Camera.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
 #include "InputManager.hpp"
 #include "Minion.hpp"
 #include "PenguinBody.hpp"
@@ -40,6 +41,9 @@ Alien::Alien(GameObject& associated, int numMinions, weak_ptr<GameObject> pbody)
 Alien::~Alien() {
   minionArray.clear();
   alienCount--;
+
+  if (alienCount == 0)
+    GameData::playerVictory = true;
 }
 
 void Alien::Start() {
