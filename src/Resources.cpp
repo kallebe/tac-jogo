@@ -50,6 +50,21 @@ Mix_Chunk* Resources::GetSound(string file) {
   return newSound;
 }
 
+TTF_Font* Resources::GetFont(string file, int ptSize) {
+  auto font = fontTable.find(file + to_string(ptSize));
+  if (font != fontTable.end())
+    return font->second;
+  
+  TTF_Font *newFont = TTF_OpenFont(&file[0], ptSize); 
+  if (newFont == nullptr) {
+    SDL_Log("Erro ao carregar fonte: %s", SDL_GetError());
+    return nullptr;
+  }
+
+  fontTable.insert({ file + to_string(ptSize), newFont });
+  return newFont;
+}
+
 void Resources::ClearImages() {
   for (const pair<string, SDL_Texture*>& pairTexture : imageTable) {
     SDL_DestroyTexture(pairTexture.second);
@@ -69,6 +84,13 @@ void Resources::ClearSounds() {
     Mix_FreeChunk(pairSound.second);
   }
   soundTable.clear();
+}
+
+void Resources::ClearFonts() {
+  for (const pair<string, TTF_Font*>& pairFont : fontTable) {
+    TTF_CloseFont(pairFont.second);
+  }
+  fontTable.clear();
 }
 
 Resources::Resources() {

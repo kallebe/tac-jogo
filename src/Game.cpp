@@ -30,6 +30,11 @@ Game::Game(string title, int width, int height) {
     SDL_Log("Erro ao inicializar SDL Mix: %s", Mix_GetError());
   }
 
+  // Inicializacao do SDL TTF
+  if (TTF_Init() != 0) {
+    SDL_Log("Erro ao inicializar SDL TTF: %s", TTF_GetError());
+  }
+
   if (Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, MIX_DEFAULT_CHANNELS, 1024) != 0) {
     SDL_Log("Erro ao inicializar SDL Mix!");
     exit(1);
@@ -66,10 +71,12 @@ Game::~Game() {
   res.ClearImages();
   res.ClearMusics();
   res.ClearSounds();
+  res.ClearFonts();
 
   Mix_CloseAudio();
   Mix_Quit();
   IMG_Quit();
+  TTF_Quit();
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   SDL_Quit();
@@ -130,6 +137,7 @@ void Game::Run() {
   res.ClearImages();
   res.ClearMusics();
   res.ClearSounds();
+  res.ClearFonts();
 }
 
 Game& Game::GetInstance() {

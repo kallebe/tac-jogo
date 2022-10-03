@@ -3,12 +3,19 @@
 
 #include "Sprite.hpp"
 #include "State.hpp"
+#include "Text.hpp"
+#include "Timer.hpp"
+
+#define TEXT_BLINK_TIME 4.0
 
 using namespace std;
 
 class TitleState : public State {
   private:
     Sprite *bg;
+    Text *text;
+    bool showText;
+    Timer textTimer;
 
   public:
     TitleState();
