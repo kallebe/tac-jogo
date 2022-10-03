@@ -15,6 +15,7 @@ using namespace std;
 class PenguinBody : public Component {
   private:
     weak_ptr<GameObject> pcannon;
+    weak_ptr<GameObject> textHp;
     Vec2    speed;
     Vec2    pos;
     float   linearSpeed;

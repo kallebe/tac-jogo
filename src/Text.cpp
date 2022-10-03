@@ -26,13 +26,12 @@ void Text::Update(float dt) {
 
 void Text::Render() {
   Game &game = Game::GetInstance();
-  Camera &camera = Camera::GetInstance();
 
   int width  = static_cast<int>(associated.box.w);
   int height = static_cast<int>(associated.box.h);
 
   SDL_Rect clipRect = { 0, 0, width, height };
-  SDL_Rect destClip = { static_cast<int>(associated.box.x - camera.pos.x), static_cast<int>(associated.box.y - camera.pos.y), width, height };
+  SDL_Rect destClip = { static_cast<int>(associated.box.x), static_cast<int>(associated.box.y), width, height };
 
   SDL_RenderCopyEx(game.GetRenderer(), texture, &clipRect, &destClip, associated.angleDeg, nullptr, SDL_FLIP_NONE);
 }

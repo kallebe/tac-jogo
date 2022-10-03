@@ -42,7 +42,7 @@ Alien::~Alien() {
   minionArray.clear();
   alienCount--;
 
-  if (alienCount == 0)
+  if (alienCount == 0 && GameData::playerHp > 0)
     GameData::playerVictory = true;
 }
 

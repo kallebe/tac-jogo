@@ -98,7 +98,7 @@ void StageState::Update(float dt) {
   if (input.KeyPress(ESCAPE_KEY))
     popRequested |= true;
 
-	if (GameData::playerVictory || GameData::playerHp == 0) {
+	if (GameData::playerVictory || GameData::playerHp <= 0) {
     popRequested |= true;
 
     EndState *end = new EndState();

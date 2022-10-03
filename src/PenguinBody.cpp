@@ -9,6 +9,7 @@
 #include "PenguinCannon.hpp"
 #include "Sound.hpp"
 #include "Sprite.hpp"
+#include "Text.hpp"
 #include "TileMap.hpp"
 #include <math.h>
 
@@ -48,6 +49,21 @@ void PenguinBody::Start() {
 
   pcannon = game.GetCurrentState().GetObjectPtr(pcGo);
 
+  // Texto para mudança de tela
+  GameObject *textGo = new GameObject();
+  textGo->box.x = 0.1 * SCREEN_WIDTH;
+  textGo->box.y = 0.1 * SCREEN_HEIGHT;
+
+  Text *continueText = new Text(*textGo, "assets/font/Call me maybe.ttf", 24, Text::BLENDED, "HP " + to_string(hp), { 186, 37, 7, 255 });
+  textGo->box.x -= textGo->box.w/2;
+  textGo->box.y -= textGo->box.h/2;
+  textGo->AddComponent(continueText);
+
+  game.GetCurrentState().AddObject(textGo);
+
+  textHp = game.GetCurrentState().GetObjectPtr(textGo);
+
+  // Follow Penguin
   Camera &camera = Camera::GetInstance();
   camera.Follow(&associated);
 }
@@ -99,9 +115,15 @@ void PenguinBody::NotifyCollision(GameObject &other) {
     hp -= bullet->GetDamage();
     GameData::playerHp = hp;
 
+    if (textHp.lock()) {
+      Text *hpText = (Text*) textHp.lock()->GetComponent("Text");
+      hpText->SetText("HP " + to_string(hp));
+    }
+
     // Deleção por hp
     if (hp <= 0) {
       camera.Unfollow();
+      textHp.lock()->RequestDelete();
       pcannon.lock()->RequestDelete();
       associated.RequestDelete();
 
