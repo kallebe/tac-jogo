@@ -7,6 +7,9 @@
 #include <vector>
 #include <string>
 
+#define TILEMAP_WIDTH  1408
+#define TILEMAP_HEIGHT 1280
+
 using namespace std;
 
 class TileMap : public Component {

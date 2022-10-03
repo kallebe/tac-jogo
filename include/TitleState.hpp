@@ -13,7 +13,7 @@ using namespace std;
 class TitleState : public State {
   private:
     Sprite *bg;
-    Text *text;
+    weak_ptr<GameObject> text;
     bool showText;
     Timer textTimer;
 

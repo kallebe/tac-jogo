@@ -17,18 +17,6 @@ TitleState::TitleState() {
 
   AddObject(titleGo);
 
-  GameObject *textGo = new GameObject();
-  textGo->box.x = SCREEN_WIDTH/2;
-  textGo->box.y = 0.85 * SCREEN_HEIGHT;
-
-  // Texto para mudança de tela
-  text = new Text(*textGo, "assets/font/Call me maybe.ttf", 32, Text::BLENDED, "Pressione Espaco para continuar", { 186, 37, 7, 255 });
-  textGo->box.x -= textGo->box.w/2;
-  textGo->box.y -= textGo->box.h/2;
-  textGo->AddComponent(text);
-
-  AddObject(textGo);
-
   textTimer    = Timer();
   showText     = false;
 }
@@ -49,7 +37,9 @@ void TitleState::Update(float dt) {
 
   textTimer.Update(dt);
   if (textTimer.Get() >= TEXT_BLINK_TIME) {
-    showText ? text->SetText("Pressione Espaco para continuar") : text->SetText("");
+    Text *continueText = (Text*) text.lock()->GetComponent("Text");
+
+    showText ? continueText->SetText("Pressione Espaco para continuar") : continueText->SetText("");
 
     textTimer.Restart();
     showText = !showText;
@@ -59,6 +49,20 @@ void TitleState::Update(float dt) {
 void TitleState::LoadAssets() {
   bg->Open("assets/img/title.jpg");
   bg->SetClip(0, 0, SCREEN_WIDTH, SCREEN_HEIGHT);
+
+  // Texto para mudança de tela
+  GameObject *textGo = new GameObject();
+  textGo->box.x = SCREEN_WIDTH/2;
+  textGo->box.y = 0.85 * SCREEN_HEIGHT;
+
+  Text *continueText = new Text(*textGo, "assets/font/Call me maybe.ttf", 32, Text::BLENDED, "Pressione Espaco para continuar", { 186, 37, 7, 255 });
+  textGo->box.x -= textGo->box.w/2;
+  textGo->box.y -= textGo->box.h/2;
+  textGo->AddComponent(continueText);
+
+  AddObject(textGo);
+
+  text = GetObjectPtr(textGo);
 }
 
 void TitleState::Start() {

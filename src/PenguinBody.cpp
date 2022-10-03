@@ -4,10 +4,12 @@
 #include "Camera.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
 #include "InputManager.hpp"
 #include "PenguinCannon.hpp"
 #include "Sound.hpp"
 #include "Sprite.hpp"
+#include "TileMap.hpp"
 #include <math.h>
 
 PenguinBody::PenguinBody(GameObject &associated) : Component(associated) {
@@ -71,8 +73,14 @@ void PenguinBody::Update(float dt) {
   }
 
   // Atualiza posição
-  pos.x += speed.x * cos(angle * M_PI / 180) * dt;
-  pos.y += speed.y * sin(angle * M_PI / 180) * dt;
+  Vec2 dpos;
+  dpos.x = speed.x * cos(angle * M_PI / 180) * dt;
+  dpos.y = speed.y * sin(angle * M_PI / 180) * dt;
+
+  if (pos.x + dpos.x > 0 && pos.x + dpos.x < TILEMAP_WIDTH)
+    pos.x += dpos.x;
+  if (pos.y + dpos.y > 0 && pos.y + dpos.y < TILEMAP_HEIGHT)
+    pos.y += dpos.y;
 
   Camera &camera = Camera::GetInstance();
 
@@ -89,6 +97,7 @@ void PenguinBody::NotifyCollision(GameObject &other) {
       return;
 
     hp -= bullet->GetDamage();
+    GameData::playerHp = hp;
 
     // Deleção por hp
     if (hp <= 0) {

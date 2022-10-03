@@ -5,8 +5,9 @@
 #include "CameraFollower.hpp"
 #include "Collision.hpp"
 #include "Collider.hpp"
-#include "Face.hpp"
+#include "EndState.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
 #include "InputManager.hpp"
 #include "PenguinBody.hpp"
 #include "Sound.hpp"
@@ -94,8 +95,15 @@ void StageState::Update(float dt) {
 	InputManager &input = InputManager::GetInstance();
   Camera &camera      = Camera::GetInstance();
 
-	if (input.KeyPress(ESCAPE_KEY))
+  if (input.KeyPress(ESCAPE_KEY))
     popRequested |= true;
+
+	if (GameData::playerVictory || GameData::playerHp == 0) {
+    popRequested |= true;
+
+    EndState *end = new EndState();
+    Game::GetInstance().Push(end);
+  }
   
   quitRequested = input.QuitRequested();
   
