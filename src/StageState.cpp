@@ -94,7 +94,10 @@ void StageState::Update(float dt) {
 	InputManager &input = InputManager::GetInstance();
   Camera &camera      = Camera::GetInstance();
 
-	quitRequested = input.KeyPress(ESCAPE_KEY) || input.QuitRequested();
+	if (input.KeyPress(ESCAPE_KEY))
+    popRequested |= true;
+  
+  quitRequested = input.QuitRequested();
   
   // Atualiza posição da Camera
   camera.Update(dt);

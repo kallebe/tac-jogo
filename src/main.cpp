@@ -1,10 +1,10 @@
 #include "Game.hpp"
-#include "StageState.hpp"
+#include "TitleState.hpp"
 
 int main(int argc, char** argv) {
   Game &game = Game::GetInstance();
 
-  StageState *state = new StageState();
+  TitleState *state = new TitleState();
   game.Push(state);
   game.Run();
 

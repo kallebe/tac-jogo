@@ -97,7 +97,7 @@ void Game::Run() {
   GetCurrentState().Start();
 
   while (!stateStack.empty() && !GetCurrentState().QuitRequested()) {
-    if (GetCurrentState().QuitRequested()) {
+    if (GetCurrentState().PopRequested()) {
       stateStack.pop();
 
       if (!stateStack.empty())
@@ -109,7 +109,11 @@ void Game::Run() {
       stateStack.push(unique_ptr<State>(storedState));
 
       GetCurrentState().Start();
+      storedState = nullptr;
     }
+
+    if (stateStack.empty())
+      break;
 
     InputManager &input = InputManager::GetInstance();
     input.Update();

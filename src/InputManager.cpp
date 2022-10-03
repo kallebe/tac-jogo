@@ -30,10 +30,7 @@ void InputManager::Update() {
         if (event.key.repeat)
           break;
 
-        if (event.key.keysym.sym == ESCAPE_KEY) {
-          quitRequested = true;
-
-        } else {
+        {
           int index = event.key.keysym.sym;
 
           // Ajustes para teclas que não têm valor de caractere
